@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import Cursor from '../components/Cursor.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title = "Chakaso — Intelligence, engineered from first principles.",
+  description = "An independent exploration of language models, computational systems, and the foundations of machine intelligence.",
+  currentPath = Astro.url.pathname
+} = Astro.props;
+
+const canonicalURL = new URL(currentPath, 'https://chakaso.tech').href;
+const siteTitle = title.includes('Chakaso') ? title : `${title} | Chakaso`;
+---
+
+<!doctype html>
+<html lang="en" class="bg-[#07080a] text-slate-100 antialiased selection:bg-indigo-500/20 selection:text-white">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#07080a" />
+    
+    <!-- Canonical & SEO -->
+    <link rel="canonical" href={canonicalURL} />
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Chakaso Research Initiative" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="Chakaso" />
+    <meta property="og:image" content="https://chakaso.tech/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://chakaso.tech/og-image.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts: Inter & JetBrains Mono with display=swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="relative min-h-screen bg-[#07080a] text-slate-100 overflow-x-hidden flex flex-col justify-between font-sans">
+    <!-- Ambient technical grid lines -->
+    <div class="fixed inset-0 pointer-events-none bg-grid-pattern opacity-25 z-0"></div>
+
+    <!-- Soft ambient spatial gradients -->
+    <div class="fixed top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-indigo-900/10 blur-[140px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-1/4 right-1/4 w-[600px] h-[600px] rounded-full bg-violet-950/10 blur-[160px] pointer-events-none z-0"></div>
+
+    <!-- Custom Desktop Cursor -->
+    <Cursor />
+
+    <!-- Global Navigation -->
+    <Navigation currentPath={currentPath} />
+
+    <!-- Main Content Flow -->
+    <main class="relative z-10 flex-grow pt-24">
+      <slot />
+    </main>
+
+    <!-- Global Footer -->
+    <Footer />
+  </body>
+</html>

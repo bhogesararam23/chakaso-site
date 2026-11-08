@@ -1,0 +1,31 @@
+---
+interface Props {
+  index?: string;
+  tag?: string;
+  title: string;
+  description?: string;
+  align?: 'left' | 'center';
+}
+
+const { index, tag, title, description, align = 'left' } = Astro.props;
+---
+
+<div class={`mb-12 ${align === 'center' ? 'text-center mx-auto max-w-3xl' : 'max-w-3xl'}`}>
+  {(index || tag) && (
+    <div class={`flex items-center gap-2 mb-3 font-mono text-xs text-indigo-400 tracking-widest uppercase ${align === 'center' ? 'justify-center' : ''}`}>
+      {index && <span>{index}</span>}
+      {index && tag && <span class="text-slate-600">—</span>}
+      {tag && <span class="text-slate-400">{tag}</span>}
+    </div>
+  )}
+
+  <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-white editorial-title">
+    {title}
+  </h2>
+
+  {description && (
+    <p class="mt-4 text-sm sm:text-base text-slate-400 leading-relaxed font-sans font-normal">
+      {description}
+    </p>
+  )}
+</div>

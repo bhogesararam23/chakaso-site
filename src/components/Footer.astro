@@ -1,0 +1,83 @@
+---
+import StatusBadge from './StatusBadge.astro';
+---
+
+<footer class="relative bg-[#050608] border-t border-white/[0.07] pt-16 pb-12 px-6 md:px-12 overflow-hidden">
+  <!-- Subtle top glow -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent"></div>
+
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/[0.06]">
+      
+      <!-- Brand & Mission statement (Col 1-5) -->
+      <div class="md:col-span-5 flex flex-col gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded border border-white/10 bg-[#0e1117] flex items-center justify-center">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="#818cf8" stroke-width="1.5"/>
+              <circle cx="12" cy="12" r="2" fill="#a855f7"/>
+            </svg>
+          </div>
+          <span class="font-mono text-sm uppercase tracking-widest text-slate-100 font-semibold">Chakaso</span>
+        </div>
+
+        <p class="text-xs text-slate-400 max-w-sm leading-relaxed font-sans">
+          An independent exploration of language models, computational systems, and the foundations of machine intelligence.
+        </p>
+
+        <div class="flex items-center gap-2 pt-2">
+          <StatusBadge status="Experimenting" size="sm" />
+          <span class="text-[11px] font-mono text-slate-500">v0.1.0 Research Baseline</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links (Col 6-8) -->
+      <div class="md:col-span-3 flex flex-col gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Navigation</span>
+        <ul class="flex flex-col gap-2 text-xs text-slate-400">
+          <li><a href="/research" class="hover:text-indigo-400 transition-colors">Research Domains</a></li>
+          <li><a href="/architecture" class="hover:text-indigo-400 transition-colors">Architecture Breakdown</a></li>
+          <li><a href="/models" class="hover:text-indigo-400 transition-colors">Experimental Baseline</a></li>
+          <li><a href="/journal" class="hover:text-indigo-400 transition-colors">Research Journal & ADRs</a></li>
+          <li><a href="/about" class="hover:text-indigo-400 transition-colors">Principles & Vision</a></li>
+        </ul>
+      </div>
+
+      <!-- Engineering & Provenance (Col 9-12) -->
+      <div class="md:col-span-4 flex flex-col gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Repository & Contract</span>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Weights trained from random initialisation. Zero unverified claims. Controlled data provenance and Apache-2.0 licensed code.
+        </p>
+        <div class="pt-2 flex flex-col gap-1.5 font-mono text-[11px] text-slate-500">
+          <a
+            href="https://github.com/bhogesararam23/chakaso"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-indigo-400/90 hover:text-indigo-300 transition-colors inline-flex items-center gap-1.5"
+          >
+            <span>github.com/bhogesararam23/chakaso</span>
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+          <span>Canonical: <span class="text-slate-400">chakaso.tech</span></span>
+          <span>License: <span class="text-slate-400">Apache-2.0</span></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom metadata bar -->
+    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-slate-500">
+      <div>
+        <span>&copy; {new Date().getFullYear()} Chakaso Research Initiative.</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <span>Deterministic Seeds</span>
+        <span>Proven Datasets</span>
+        <span>Level 2 Release Gate</span>
+      </div>
+    </div>
+  </div>
+</footer>

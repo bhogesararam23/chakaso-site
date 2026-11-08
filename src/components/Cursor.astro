@@ -1,0 +1,110 @@
+---
+// Custom Desktop Cursor System
+---
+
+<div id="custom-cursor-container" class="pointer-events-none fixed inset-0 z-[9999] overflow-hidden hidden md:block" aria-hidden="true">
+  <!-- Subtle cursor-reactive ambient glow -->
+  <div id="cursor-glow" class="absolute w-[360px] h-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none opacity-20 blur-3xl transition-opacity duration-300" style="background: radial-gradient(circle, rgba(129, 140, 248, 0.15) 0%, rgba(168, 85, 247, 0.05) 40%, transparent 70%);"></div>
+
+  <!-- Soft outer trailing ring -->
+  <div id="cursor-ring" class="absolute w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-indigo-400/40 pointer-events-none transition-[width,height,border-color,background-color] duration-200 ease-out flex items-center justify-center">
+    <span id="cursor-label" class="text-[9px] font-mono text-indigo-200 tracking-wider uppercase opacity-0 transition-opacity duration-150 whitespace-nowrap"></span>
+  </div>
+
+  <!-- Central precise dot -->
+  <div id="cursor-dot" class="absolute w-1.5 h-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white pointer-events-none transition-transform duration-75 ease-out shadow-sm shadow-indigo-500/50"></div>
+</div>
+
+<script>
+  // High-performance cursor interpolation
+  (function () {
+    // Only run on non-touch devices with fine pointers and no reduced-motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+    if (prefersReducedMotion || isTouch) return;
+
+    const container = document.getElementById('custom-cursor-container');
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    const glow = document.getElementById('cursor-glow');
+    const label = document.getElementById('cursor-label');
+
+    if (!container || !dot || !ring || !glow || !label) return;
+
+    container.classList.remove('hidden');
+
+    let mouseX = -100;
+    let mouseY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let isVisible = false;
+
+    // Smooth linear interpolation factor
+    const speed = 0.18;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isVisible) {
+        isVisible = true;
+        ringX = mouseX;
+        ringY = mouseY;
+        container.style.opacity = '1';
+      }
+
+      // Fast update for central dot and ambient glow
+      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+      glow.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', () => {
+      isVisible = false;
+      container.style.opacity = '0';
+    });
+
+    document.addEventListener('mouseenter', () => {
+      isVisible = true;
+      container.style.opacity = '1';
+    });
+
+    // Hover responsiveness for links, buttons, and interactive cards
+    const updateHoverState = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      const interactive = target.closest('a, button, [role="button"], input, select, .interactive-card, .research-item');
+      if (interactive) {
+        ring.classList.add('w-12', 'h-12', 'border-indigo-400/80', 'bg-indigo-500/10');
+        ring.classList.remove('w-8', 'h-8', 'border-indigo-400/40');
+        dot.style.opacity = '0.5';
+
+        const customLabel = interactive.getAttribute('data-cursor-label');
+        if (customLabel) {
+          label.textContent = customLabel;
+          label.style.opacity = '1';
+        } else {
+          label.style.opacity = '0';
+        }
+      } else {
+        ring.classList.remove('w-12', 'h-12', 'border-indigo-400/80', 'bg-indigo-500/10');
+        ring.classList.add('w-8', 'h-8', 'border-indigo-400/40');
+        dot.style.opacity = '1';
+        label.style.opacity = '0';
+      }
+    };
+
+    window.addEventListener('mouseover', updateHoverState, { passive: true });
+
+    // Animation frame loop for outer ring smooth trailing
+    function render() {
+      if (isVisible) {
+        ringX += (mouseX - ringX) * speed;
+        ringY += (mouseY - ringY) * speed;
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+      }
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+  })();
+</script>
