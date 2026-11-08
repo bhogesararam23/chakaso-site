@@ -21,20 +21,20 @@ import StatusBadge from './StatusBadge.astro';
           <span class="font-mono text-sm uppercase tracking-widest text-slate-100 font-semibold">Chakaso</span>
         </div>
 
-        <p class="text-xs text-slate-400 max-w-sm leading-relaxed font-sans">
-          An independent exploration of language models, computational systems, and the foundations of machine intelligence.
+        <p class="text-sm text-slate-300 max-w-sm leading-relaxed font-sans">
+          An independent exploration of compact language models, subword tokenization, and empirical evaluation harnesses.
         </p>
 
         <div class="flex items-center gap-2 pt-2">
           <StatusBadge status="Experimenting" size="sm" />
-          <span class="text-[11px] font-mono text-slate-500">Chakaso Base 0.1.0 · Level 2</span>
+          <span class="text-xs font-mono text-slate-400">Chakaso Base 0.1.0 · Level 2</span>
         </div>
       </div>
 
       <!-- Research Program (Col 5-7) -->
       <div class="md:col-span-3 flex flex-col gap-3">
-        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Research Program</span>
-        <ul class="flex flex-col gap-2 text-xs text-slate-400">
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold">Research Program</span>
+        <ul class="flex flex-col gap-2 text-sm text-slate-300">
           <li><a href="/research" class="hover:text-indigo-400 transition-colors">Program Overview</a></li>
           <li><a href="/research/experiments" class="hover:text-indigo-400 transition-colors">Experiment Archive (E2601–E2636)</a></li>
           <li><a href="/research/methodology" class="hover:text-indigo-400 transition-colors">Methodology & Error Bands</a></li>
@@ -45,8 +45,8 @@ import StatusBadge from './StatusBadge.astro';
 
       <!-- System & Docs (Col 8-10) -->
       <div class="md:col-span-3 flex flex-col gap-3">
-        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">System & Artifacts</span>
-        <ul class="flex flex-col gap-2 text-xs text-slate-400">
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold">System & Artifacts</span>
+        <ul class="flex flex-col gap-2 text-sm text-slate-300">
           <li><a href="/models" class="hover:text-indigo-400 transition-colors">Chakaso Base 0.1.0 Profile</a></li>
           <li><a href="/architecture" class="hover:text-indigo-400 transition-colors">Causal Decoder Architecture</a></li>
           <li><a href="/docs" class="hover:text-indigo-400 transition-colors">Technical Documentation</a></li>
@@ -57,8 +57,8 @@ import StatusBadge from './StatusBadge.astro';
 
       <!-- Provenance & Source (Col 11-12) -->
       <div class="md:col-span-2 flex flex-col gap-3">
-        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Repository</span>
-        <div class="flex flex-col gap-2 text-xs text-slate-400">
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold">Repository</span>
+        <div class="flex flex-col gap-2 text-sm text-slate-300">
           <a
             href="https://github.com/bhogesararam23/chakaso"
             target="_blank"
@@ -66,7 +66,7 @@ import StatusBadge from './StatusBadge.astro';
             class="text-indigo-400/90 hover:text-indigo-300 transition-colors inline-flex items-center gap-1.5"
           >
             <span>Model Repository</span>
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
@@ -74,21 +74,21 @@ import StatusBadge from './StatusBadge.astro';
             href="https://github.com/bhogesararam23/chakaso-site"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-slate-400 hover:text-slate-200 transition-colors inline-flex items-center gap-1.5"
+            class="text-slate-300 hover:text-slate-100 transition-colors inline-flex items-center gap-1.5"
           >
             <span>Website Source</span>
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
-          <span class="text-[11px] font-mono text-slate-500 pt-1">License: Apache-2.0</span>
+          <span class="text-xs font-mono text-slate-400 pt-1">License: Apache-2.0</span>
         </div>
       </div>
 
     </div>
 
     <!-- Bottom metadata bar -->
-    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-slate-500">
+    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-400">
       <div>
         <span>&copy; {new Date().getFullYear()} Chakaso Research Initiative.</span>
       </div>

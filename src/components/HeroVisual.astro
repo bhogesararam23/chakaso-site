@@ -29,20 +29,20 @@
     <!-- Tensor Dimensions Strip -->
     <div class="grid grid-cols-4 gap-2 mb-5 font-mono text-center text-xs">
       <div class="p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
-        <span class="text-[10px] text-slate-400 block">d_model</span>
-        <span class="font-semibold text-white">256</span>
+        <span class="text-xs text-slate-400 block font-medium">d_model</span>
+        <span class="text-sm font-semibold text-white">256</span>
       </div>
       <div class="p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
-        <span class="text-[10px] text-slate-400 block">n_layers</span>
-        <span class="font-semibold text-white">6</span>
+        <span class="text-xs text-slate-400 block font-medium">n_layers</span>
+        <span class="text-sm font-semibold text-white">6</span>
       </div>
       <div class="p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
-        <span class="text-[10px] text-slate-400 block">heads (h)</span>
-        <span class="font-semibold text-white">4 × 64</span>
+        <span class="text-xs text-slate-400 block font-medium">heads (h)</span>
+        <span class="text-sm font-semibold text-white">4 × 64</span>
       </div>
       <div class="p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
-        <span class="text-[10px] text-slate-400 block">d_ffn</span>
-        <span class="font-semibold text-white">1,024</span>
+        <span class="text-xs text-slate-400 block font-medium">d_ffn</span>
+        <span class="text-sm font-semibold text-white">1,024</span>
       </div>
     </div>
 
@@ -52,65 +52,65 @@
       <!-- Stage 1: Ingestion & Subword -->
       <div class="p-3 rounded-xl border border-white/[0.06] bg-[#07080a] flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <span class="text-[11px] text-slate-400 w-5">01</span>
+          <span class="text-xs text-slate-400 font-semibold w-5">01</span>
           <div>
-            <div class="text-slate-200 font-medium">Space-Prefixed Subword BPE</div>
-            <div class="text-[11px] text-slate-400">4,096 vocabulary · byte-level fallback · ADR-0051</div>
+            <div class="text-slate-200 font-medium text-xs sm:text-sm">Space-Prefixed Subword BPE</div>
+            <div class="text-xs text-slate-400">4,096 vocabulary · byte-level fallback · ADR-0051</div>
           </div>
         </div>
-        <span class="text-[11px] text-slate-400">T ≤ 256</span>
+        <span class="text-xs text-slate-400">T ≤ 256</span>
       </div>
 
       <!-- Arrow down connector -->
-      <div class="flex justify-center text-slate-600 text-[10px] -my-1">↓</div>
+      <div class="flex justify-center text-slate-500 text-xs -my-1">↓</div>
 
       <!-- Stage 2: Embedding & Positional Encoding -->
       <div class="p-3 rounded-xl border border-white/[0.06] bg-[#07080a] flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <span class="text-[11px] text-slate-400 w-5">02</span>
+          <span class="text-xs text-slate-400 font-semibold w-5">02</span>
           <div>
-            <div class="text-slate-200 font-medium">Embedding & Rotary Encodings</div>
-            <div class="text-[11px] text-slate-400">Dense projection to ℝ²⁵⁶ + RoPE pairwise rotation</div>
+            <div class="text-slate-200 font-medium text-xs sm:text-sm">Embedding & Rotary Encodings</div>
+            <div class="text-xs text-slate-400">Dense projection to ℝ²⁵⁶ + RoPE pairwise rotation</div>
           </div>
         </div>
-        <span class="text-[11px] text-indigo-400">RoPE</span>
+        <span class="text-xs text-indigo-400 font-semibold">RoPE</span>
       </div>
 
       <!-- Arrow down connector -->
-      <div class="flex justify-center text-slate-600 text-[10px] -my-1">↓</div>
+      <div class="flex justify-center text-slate-500 text-xs -my-1">↓</div>
 
       <!-- Stage 3: Stacked Transformer Blocks (x6) -->
       <div class="p-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/15">
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-2">
-            <span class="text-[11px] text-indigo-400 font-semibold w-5">03</span>
-            <span class="text-white font-semibold">6× Causal Decoder Blocks</span>
+            <span class="text-xs text-indigo-400 font-semibold w-5">03</span>
+            <span class="text-white font-semibold text-xs sm:text-sm">6× Causal Decoder Blocks</span>
           </div>
-          <span class="text-[10px] text-indigo-300 uppercase px-2 py-0.5 rounded bg-indigo-500/20">Repeated Stack</span>
+          <span class="text-xs text-indigo-300 uppercase px-2 py-0.5 rounded bg-indigo-500/20 font-medium">Repeated Stack</span>
         </div>
         
-        <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-indigo-500/20 text-[11px]">
+        <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-indigo-500/20 text-xs">
           <div class="p-2 rounded bg-black/40 border border-white/[0.04]">
             <div class="text-slate-300 font-medium">Pre-LN Attention</div>
-            <div class="text-slate-400 text-[10px]">RMSNorm → Causal MHA</div>
+            <div class="text-slate-400 text-xs">RMSNorm → Causal MHA</div>
           </div>
           <div class="p-2 rounded bg-black/40 border border-white/[0.04]">
             <div class="text-slate-300 font-medium">Pre-LN Feed-Forward</div>
-            <div class="text-slate-400 text-[10px]">RMSNorm → GELU FFN (1,024)</div>
+            <div class="text-slate-400 text-xs">RMSNorm → GELU FFN (1,024)</div>
           </div>
         </div>
       </div>
 
       <!-- Arrow down connector -->
-      <div class="flex justify-center text-slate-600 text-[10px] -my-1">↓</div>
+      <div class="flex justify-center text-slate-500 text-xs -my-1">↓</div>
 
       <!-- Stage 4: Logit Output -->
       <div class="p-3 rounded-xl border border-white/[0.06] bg-[#07080a] flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <span class="text-[11px] text-slate-400 w-5">04</span>
+          <span class="text-xs text-slate-400 font-semibold w-5">04</span>
           <div>
-            <div class="text-slate-200 font-medium">Final RMSNorm & Output Logits</div>
-            <div class="text-[11px] text-slate-400">Projection to 4,096 logits · Bounded decoding (ADR-0038)</div>
+            <div class="text-slate-200 font-medium text-xs sm:text-sm">Final RMSNorm & Output Logits</div>
+            <div class="text-xs text-slate-400">Projection to 4,096 logits · Bounded decoding (ADR-0038)</div>
           </div>
         </div>
         <span class="text-[11px] text-emerald-400">P(x_t)</span>

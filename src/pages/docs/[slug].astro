@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { DOC_SECTIONS, type DocSection } from '../../data/docs';
+import { renderMarkdown } from '../../utils/markdown';
 
 export function getStaticPaths() {
   return DOC_SECTIONS.map((doc) => ({
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const { doc } = Astro.props;
+const htmlContent = renderMarkdown(doc.content);
 
 // Group docs by category for the sidebar
 const categories = Array.from(new Set(DOC_SECTIONS.map((d) => d.category)));
@@ -80,10 +82,8 @@ const categories = Array.from(new Set(DOC_SECTIONS.map((d) => d.category)));
         </div>
 
         <!-- Documentation Body -->
-        <div class="py-8 prose prose-invert max-w-none text-slate-300 font-sans text-sm sm:text-base leading-relaxed space-y-6">
-          <div class="whitespace-pre-line leading-relaxed font-sans">
-            {doc.content}
-          </div>
+        <div class="py-8 doc-prose max-w-none">
+          <div set:html={htmlContent} />
         </div>
 
         <!-- Provenance Footer -->

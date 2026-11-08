@@ -122,6 +122,134 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   outline-offset: 3px;
 }
 
+/* Documentation Markdown prose styling */
+.doc-prose {
+  color: #cbd5e1;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.doc-prose h1, .doc-prose h2, .doc-prose h3, .doc-prose h4 {
+  color: #f8fafc;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.doc-prose h1 { font-size: 2rem; line-height: 1.25; }
+.doc-prose h2 { font-size: 1.5rem; line-height: 1.35; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 0.5rem; }
+.doc-prose h3 { font-size: 1.25rem; line-height: 1.4; }
+.doc-prose h4 { font-size: 1.1rem; line-height: 1.4; }
+
+.doc-prose p {
+  margin-bottom: 1.25rem;
+}
+
+.doc-prose ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.doc-prose ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.doc-prose li {
+  line-height: 1.65;
+}
+
+.doc-prose strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.doc-prose em {
+  font-style: italic;
+  color: #e2e8f0;
+}
+
+.doc-prose a {
+  color: #818cf8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.doc-prose a:hover {
+  color: #a5b4fc;
+}
+
+.doc-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  color: #e0e7ff;
+}
+
+.doc-prose pre {
+  background: #040507;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.doc-prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #f1f5f9;
+}
+
+.doc-prose blockquote {
+  border-left: 3px solid #818cf8;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.doc-prose hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 2rem 0;
+}
+
+.doc-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+
+.doc-prose th, .doc-prose td {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.doc-prose th {
+  background: rgba(255, 255, 255, 0.04);
+  color: #f8fafc;
+  font-weight: 600;
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

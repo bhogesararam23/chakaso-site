@@ -36,13 +36,23 @@ for (let i = 10; i <= 36; i++) {
 
 // 2. SwiGLU check in released model references
 // Chakaso Base 0.1.0 uses standard GELU, not SwiGLU.
+// Released models and architectural schematics must not refer to SwiGLU as active.
 const filesToCheckForSwiglu = [
   'src/components/ArchitectureFlow.astro',
-  'src/data/docs.ts',
+  'src/components/HeroVisual.astro',
   'src/data/researchDomains.ts',
   'src/pages/architecture.astro',
   'src/pages/models.astro'
 ];
+
+for (const relPath of filesToCheckForSwiglu) {
+  const fullPath = path.join(__dirname, '..', relPath);
+  if (fs.existsSync(fullPath)) {
+    const fileContent = fs.readFileSync(fullPath, 'utf8');
+    const hasSwiglu = /\bswiglu\b/i.test(fileContent);
+    report(!hasSwiglu, `${relPath} must not describe active baseline as SwiGLU`);
+  }
+}
 
 // 3. GitHub markdown link invariants - no dead / raw GitHub links to markdown files in research or content
 const allSrcFiles = [];

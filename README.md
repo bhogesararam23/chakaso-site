@@ -10,12 +10,12 @@ Chakaso is an independent artificial intelligence research and engineering initi
 
 ---
 
-## Brand Positioning
+## Brand & Research Positioning
 
 > **CHAKASO**  
-> *"Intelligence, engineered from first principles."*  
+> *"Language models, trained from random initialization."*  
 >  
-> *"An independent exploration of language models, computational systems, and the foundations of machine intelligence."*
+> *"An independent exploration of compact language models, subword tokenization, and empirical evaluation harnesses."*
 
 The website presents Chakaso as a serious, technically sophisticated independent research initiative. It avoids marketing exaggerations, student portfolio clichés, and generic AI startup tropes, communicating ambition while strictly reflecting the measured empirical reality of the underlying research.
 
@@ -28,7 +28,7 @@ The website serves as the primary editorial, educational, and publication interf
 1. **Publish First-Party Research:** Present verified experimental findings, methodologies, and architectural decisions directly on-site without forcing visitors to navigate raw source files on GitHub.
 2. **Transparently Report Baselines:** Document model parameters, held-out losses, dataset provenance, and exact behavioural limitations with scientific integrity.
 3. **Detail System Architecture:** Provide visual, mathematical, and conceptual explanations of the causal transformer pipeline, tokenizer contracts, and local zero-dependency runtimes.
-4. **House the Documentation Hub:** Provide a searchable technical reference for the Chakaso Python interface, model lifecycle, and serving protocols.
+4. **House the Documentation Hub:** Provide a fully rendered Markdown technical reference for the Chakaso Python interface, model lifecycle, and serving protocols.
 5. **Maintain an Empirical Journal:** Track chronological architectural decision records (ADRs) and experiment reports with clear evidence classifications.
 
 ---
@@ -39,29 +39,29 @@ The website is structured into eleven dedicated knowledge sections and sub-domai
 
 | Section | Route | Focus |
 | :--- | :--- | :--- |
-| **Homepage** | `/` | Spatial intelligence visual, brand philosophy, 6 foundational domains, architecture preview, and live status matrix. |
-| **Research Hub** | `/research` | The research program, questions, active hypotheses, and seven technical sub-domains. |
-| **Experiment Archive** | `/research/experiments` | Searchable, filterable ledger of verified experiments (E2601 through E2636) with exact parameters and findings. |
-| **Methodology** | `/research/methodology` | Scientific standards: preregistration, seed studies, Holm–Bonferroni corrections, and negative-result reporting. |
+| **Homepage** | `/` | Technical architecture schematic, research positioning, foundational inquiry domains, and research ledger. |
+| **Research Hub** | `/research` | The research program, questions, active hypotheses, and technical sub-domains. |
+| **Experiment Archive** | `/research/experiments` | Searchable, filterable ledger of all 35 verified experiments (E2601–E2608, E2610–E2636) with exact parameters and findings. |
+| **Methodology** | `/research/methodology` | Scientific standards: preregistration, multi-seed variance bounds, Holm–Bonferroni corrections, and negative-result reporting. |
 | **Data & Provenance** | `/research/data` | Corpus composition, document boundaries, SHA-256 fingerprints, and licensing. |
 | **Evaluation** | `/research/evaluation` | Bits per character (bpc), within-work vs whole-work splits, repetition metrics, and capability probes. |
 | **Models** | `/models` | Model research catalog and detailed profile for Chakaso Base 0.1.0 (3.41M parameters, Level 2 release gate). |
 | **Architecture** | `/architecture` | Deep computational breakdown of the causal decoder stack, tensor dimensions, and standard-library HTTP serving. |
-| **Documentation** | `/docs` | Comprehensive on-site technical guides for the Python library, model contracts, and local serving adapters. |
+| **Documentation** | `/docs` | Comprehensive on-site technical guides for the Python library, model contracts, and local serving adapters with formatted Markdown. |
 | **Journal** | `/journal` | Formal publication log of Architectural Decision Records (ADRs) and research dispatches. |
-| **About** | `/about` | Project genesis, engineering ethics, non-commercial research ethos, and long-term vision. |
+| **About** | `/about` | Project genesis, engineering ethics, non-commercial research ethos, and licensing boundaries. |
 
 ---
 
 ## Frontend Architecture & Design Principles
 
-The website is designed with a premium, experimental, and dark technical aesthetic:
+The website is engineered for clarity, readability, and technical precision:
 
-- **Framework:** [Astro 5](https://astro.build/) (Static Site Generation for sub-millisecond page loads and complete SEO indexing)
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) with a bespoke dark graphite (`#07080a`) and restrained violet/blue design token system
-- **Interactive Visuals:** Bespoke HTML5 Canvas 3D spatial lattice engine with real-time perspective projection and cursor-reactive parallax
+- **Framework:** [Astro 5](https://astro.build/) (Static Site Generation for fast page loads and complete SEO indexing)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) with a restrained dark technical palette, legible typography scales, and native accessibility
 - **Interactive Components:** React 19 islands for interactive tokenizer exploration and dynamic experiment filtering
-- **Motion & Ergonomics:** High-performance desktop cursor interpolation with trailing outer ring, contextual hover labels, and full `prefers-reduced-motion` compliance
+- **Technical Schematics:** Purpose-built, static architecture schematics representing exact tensor shapes and pipeline stages of `chakaso-base@0.1.0`
+- **Documentation Engine:** Safe, sanitized Markdown parsing (marked + sanitize-html) with automated ADR cross-linking
 - **Dependencies:** Pure static output with zero runtime external API dependencies (no GitHub API rate limits, no third-party trackers, no backend server requirements)
 
 ---

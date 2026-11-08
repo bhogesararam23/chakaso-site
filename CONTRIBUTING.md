@@ -81,6 +81,6 @@ The website is statically deployed to **Cloudflare Pages**:
 - **Framework Preset:** `None` / `Astro`
 - **Build Command:** `pnpm build`
 - **Build Output Directory:** `dist`
-- **Environment Variable:** `NODE_VERSION=20.18.0`
+- **Environment Variable:** `NODE_VERSION=22.14.0`
 
 Do not report the website as "deployed" or "live" until Cloudflare Pages has successfully completed a production deployment and custom domain DNS routing to `chakaso.tech` has been verified.
