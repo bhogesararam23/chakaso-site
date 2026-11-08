@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+
+const verifiedADRs = [
+  {
+    id: 'ADR-0039',
+    type: 'Architecture Decision',
+    date: '2026-10-24',
+    title: 'Three-Level Model Release Gate',
+    summary: 'Establishes a mandatory 3-tier release gate. Level 1 (Structural Artifact), Level 2 (Reproducible Integration), and Level 3 (Useful Assistant Behavior). Formally withholds Level 3 until generation meets empirical utility standards.',
+    status: 'Implemented' as const
+  },
+  {
+    id: 'ADR-0038',
+    type: 'Engineering Decision',
+    date: '2026-10-20',
+    title: 'Local HTTP Serving Adapter from the Standard Library',
+    summary: 'Implements an OpenAI-compatible /v1/chat/completions server using Python\'s built-in http.server, with SSE streaming, bounded thread concurrency, and instant request cancellation upon disconnect.',
+    status: 'Implemented' as const
+  },
+  {
+    id: 'ADR-0033',
+    type: 'Product Architecture',
+    date: '2026-10-14',
+    title: 'Model-Centred Product Contract',
+    summary: 'Defines the Python library as the primary interface for Chakaso. Establishes that the conversational application layer is a consumer of the model, built to measure and check the model rather than disguise it.',
+    status: 'Implemented' as const
+  },
+  {
+    id: 'EXP-E2608',
+    type: 'Experiment Report',
+    date: '2026-10-22',
+    title: 'Causal Decoder Transformer on Gutenberg Prose v2',
+    summary: 'Measured 3.41M parameter causal transformer across 14.5M characters of balanced public domain text. Observed reduction of periodic runs to zero, with mean bigram repetition of 0.5538 and held-out loss of 1.6865 bpc.',
+    status: 'Implemented' as const
+  }
+];
+---
+
+<Layout
+  title="Research Journal & Decision Records — Chakaso"
+  description="Chronological log of verified architectural decisions, experiment notes, and engineering updates for the Chakaso research initiative."
+  currentPath="/journal"
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    
+    <!-- Hero / Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Research Journal & Dispatches</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
+        The Empirical Ledger
+      </h1>
+
+      <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
+        A chronological archive of architectural decision records (ADRs), experiment logs, and technical notes. We do not manufacture synthetic publications; only verified decisions and measured experiments are documented here.
+      </p>
+    </div>
+
+    <!-- 1. Verified Architectural Decisions & Notes -->
+    <div class="mb-20">
+      <SectionHeader
+        index="RECORDS"
+        tag="VERIFIED"
+        title="Architectural Decisions & Experiment Logs"
+        description="Formal engineering decisions ratified in the research repository."
+      />
+
+      <div class="flex flex-col gap-6">
+        {verifiedADRs.map((entry) => (
+          <article class="p-6 sm:p-8 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/80 hover:border-indigo-500/30 transition-all duration-300">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
+              <div class="flex items-center gap-3">
+                <span class="font-mono text-xs font-semibold text-indigo-400">{entry.id}</span>
+                <span class="text-slate-600 text-xs">/</span>
+                <span class="font-mono text-xs text-slate-400 uppercase tracking-wider">{entry.type}</span>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="font-mono text-xs text-slate-500">{entry.date}</span>
+                <StatusBadge status={entry.status} size="sm" />
+              </div>
+            </div>
+
+            <h2 class="text-xl sm:text-2xl font-semibold text-white mt-4 mb-2 tracking-tight">
+              {entry.title}
+            </h2>
+
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans max-w-4xl">
+              {entry.summary}
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- 2. Peer-Reviewed Papers Section (Honest State) -->
+    <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#090b10] flex flex-col items-center text-center max-w-3xl mx-auto">
+      <div class="w-10 h-10 rounded-full border border-white/10 bg-[#0e1117] flex items-center justify-center text-slate-400 mb-4">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+        </svg>
+      </div>
+
+      <span class="font-mono text-xs uppercase tracking-widest text-indigo-400 mb-1">Publications Status</span>
+      <h3 class="text-lg font-semibold text-white mb-2">Formal Academic Publications: Pending Level 3 Gate</h3>
+      <p class="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed font-sans">
+        Chakaso does not list unverified preprints or speculative research papers. Formal manuscripts will be released when empirical scaling laws and architectural comparisons reach reproducible conclusions.
+      </p>
+
+      <div class="mt-6">
+        <a
+          href="https://github.com/bhogesararam23/chakaso/tree/main/docs/decisions"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 hover:border-indigo-500/40 bg-[#0e1117] text-xs font-mono text-indigo-300 hover:text-white transition-all"
+        >
+          <span>Browse ADRs in Git Repository</span>
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</Layout>

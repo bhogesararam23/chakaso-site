@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="404 — Coordinate Not Found | Chakaso"
+  description="The requested route does not exist in the Chakaso research repository."
+  currentPath="/404"
+>
+  <div class="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center">
+    <!-- Monogram outline -->
+    <div class="w-16 h-16 rounded-2xl border border-white/10 bg-[#0c0e12] flex items-center justify-center mb-6">
+      <svg class="w-8 h-8 text-indigo-400" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="8" y1="8" x2="16" y2="16" stroke="#f43f5e" stroke-width="1.5"/>
+        <line x1="16" y1="8" x2="8" y2="16" stroke="#f43f5e" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+    <span class="font-mono text-xs uppercase tracking-widest text-indigo-400 mb-2">Error 404</span>
+    <h1 class="text-3xl sm:text-5xl font-bold text-white tracking-tight editorial-title mb-4">
+      Coordinate Not Found
+    </h1>
+    <p class="text-sm text-slate-400 max-w-md font-sans mb-8">
+      The requested URI does not map to any active node or research record in the Chakaso manifold.
+    </p>
+
+    <div class="flex items-center gap-4">
+      <a
+        href="/"
+        class="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-mono text-xs uppercase tracking-wider transition-colors"
+      >
+        Return to Origin
+      </a>
+      <a
+        href="/research"
+        class="px-5 py-2.5 rounded-lg border border-white/10 hover:border-white/20 bg-[#0e1117] text-slate-300 font-mono text-xs uppercase tracking-wider transition-colors"
+      >
+        Browse Research
+      </a>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,196 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+
+const verifiedBaseline = {
+  name: 'chakaso-base (E2608 Decoder Arm)',
+  version: '0.1.0-dev',
+  releaseLevel: 'Level 2 (Reproducible Integration Gate Passed)',
+  usefulBehaviorStatus: 'Level 3 Withheld (Experimental Baseline)',
+  parameters: '3,412,480 (~3.41M)',
+  contextPositions: '256 tokens',
+  vocabEntries: '4,096 BPE Subwords (Deterministic Byte Fallback)',
+  heldOutMetric: '1.6865 bits per character (bpc)',
+  corpus: 'Gutenberg English Prose v2 (24 texts, 919 docs, 14,490,005 chars, fingerprint: e9fc2e92f59d88ea)',
+  repetitionRate: 'Mean bigram repetition: 0.5538 (Zero periodic runs of 3+)',
+  license: 'Apache-2.0'
+};
+
+const releaseLevels = [
+  {
+    level: 'Level 1',
+    name: 'Structural Artifact Gate',
+    status: 'PASSED' as const,
+    desc: 'Model directory contains valid model.json, checkpoint tensors pass SHA-256 integrity, architecture hyper-parameters load cleanly into Python.'
+  },
+  {
+    level: 'Level 2',
+    name: 'Reproducible Integration Gate',
+    status: 'PASSED' as const,
+    desc: 'Checkpoint can be re-trained deterministically from committed seed and dataset manifest. Runtime loads and performs bounded forward passes in CI.'
+  },
+  {
+    level: 'Level 3',
+    name: 'Useful Assistant Behavior Gate',
+    status: 'WITHHELD' as const,
+    desc: 'Withheld by design. Current 3.41M parameter baseline does not produce coherent, usable text for general-purpose user tasks.'
+  }
+];
+
+const honestyChecklist = [
+  {
+    topic: 'Production Readiness',
+    claim: 'NOT Production Ready',
+    note: 'This is an experimental research prototype for inspecting language model dynamics, not a commercial deployment.'
+  },
+  {
+    topic: 'Assistant Capability',
+    claim: 'NOT an Instruction-Following Assistant',
+    note: 'The model has undergone pre-training only. It does not possess instruction-following or conversational reasoning capabilities.'
+  },
+  {
+    topic: 'Public Checkpoint Downloads',
+    claim: 'Weights Withheld from Public Git',
+    note: 'Under ADR-0004, heavy binary checkpoints stay out of Git. Releases are cited by immutable SHA-256 checksums and can be retrained on demand.'
+  },
+  {
+    topic: 'Data Provenance',
+    claim: '100% Verified Provenance',
+    note: 'Zero scraped web dumps of ambiguous origin. Datasets are strictly Apache-2.0 repository text or verified public-domain Gutenberg prose.'
+  }
+];
+---
+
+<Layout
+  title="Experimental Models & Baselines — Chakaso"
+  description="Transparent specifications of the Chakaso experimental model baseline: 3.41M parameters, 1.6865 bpc held-out loss, and Level 2 release contract."
+  currentPath="/models"
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    
+    <!-- Hero / Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Experimental Baseline</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
+        The 3.41M Research Baseline
+      </h1>
+
+      <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
+        We report actual measurements from trained checkpoints. Chakaso’s baseline model represents a transparent baseline designed to test the limits of compact language representations.
+      </p>
+    </div>
+
+    <!-- 1. Verified Model Fact Sheet -->
+    <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/90 mb-20">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/[0.08] gap-4">
+        <div>
+          <span class="font-mono text-xs text-indigo-400 uppercase tracking-widest">Active Checkpoint</span>
+          <h2 class="text-2xl font-bold text-white mt-1 font-mono">{verifiedBaseline.name}</h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <StatusBadge status="Experimenting" size="md" />
+        </div>
+      </div>
+
+      <!-- Grid of Verified Metrics -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-8 border-b border-white/[0.08]">
+        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
+          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-500">Parameters</span>
+          <div class="text-2xl font-semibold text-white mt-1 font-mono">{verifiedBaseline.parameters}</div>
+          <span class="text-[11px] text-slate-500 font-sans mt-1 block">Full causal decoder stack</span>
+        </div>
+
+        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
+          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-500">Held-Out Loss</span>
+          <div class="text-2xl font-semibold text-indigo-400 mt-1 font-mono">{verifiedBaseline.heldOutMetric}</div>
+          <span class="text-[11px] text-slate-500 font-sans mt-1 block">Whole-work author split</span>
+        </div>
+
+        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
+          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-500">Context Length</span>
+          <div class="text-2xl font-semibold text-white mt-1 font-mono">{verifiedBaseline.contextPositions}</div>
+          <span class="text-[11px] text-slate-500 font-sans mt-1 block">Learned positional range</span>
+        </div>
+
+        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
+          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-500">Vocabulary</span>
+          <div class="text-2xl font-semibold text-white mt-1 font-mono">4,096 BPE</div>
+          <span class="text-[11px] text-slate-500 font-sans mt-1 block">Byte fallback (zero [UNK])</span>
+        </div>
+      </div>
+
+      <!-- Corpus and Provenance Details -->
+      <div class="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono text-slate-400">
+        <div>
+          <span class="text-slate-500 uppercase tracking-wider block mb-1">Training Corpus Provenance:</span>
+          <p class="text-slate-300 leading-relaxed font-sans">{verifiedBaseline.corpus}</p>
+        </div>
+        <div>
+          <span class="text-slate-500 uppercase tracking-wider block mb-1">Repetition & Generation Quality:</span>
+          <p class="text-slate-300 leading-relaxed font-sans">{verifiedBaseline.repetitionRate}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. The Three-Level Release Gate (ADR-0039) -->
+    <div class="mb-20">
+      <SectionHeader
+        index="02"
+        tag="GOVERNANCE"
+        title="The Three-Level Model Release Gate"
+        description="Every model trained by Chakaso is evaluated against a tripartite release contract (ADR-0039) before distribution or runtime claims are made."
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {releaseLevels.map((lvl) => (
+          <div class="p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-xs text-indigo-400 font-semibold">{lvl.level}</span>
+                <span class={`font-mono text-[10px] px-2 py-0.5 rounded border uppercase tracking-wider ${
+                  lvl.status === 'PASSED'
+                    ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10'
+                    : 'border-amber-500/30 text-amber-400 bg-amber-500/10'
+                }`}>
+                  {lvl.status}
+                </span>
+              </div>
+              <h3 class="text-base font-semibold text-white mb-2">{lvl.name}</h3>
+              <p class="text-xs text-slate-400 leading-relaxed font-sans">
+                {lvl.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- 3. Explicit Limitations & Honesty Checklist -->
+    <div id="evaluation" class="mb-12">
+      <SectionHeader
+        index="03"
+        tag="INTEGRITY"
+        title="Explicit Limitations & Boundaries"
+        description="What this research baseline can and cannot do. We strictly reject inflated marketing claims."
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {honestyChecklist.map((c) => (
+          <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0b0d13]/70">
+            <span class="text-[10px] font-mono uppercase tracking-wider text-indigo-400">{c.topic}</span>
+            <h3 class="text-sm font-semibold text-white mt-1 mb-2 font-mono">{c.claim}</h3>
+            <p class="text-xs text-slate-400 leading-relaxed font-sans">
+              {c.note}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</Layout>

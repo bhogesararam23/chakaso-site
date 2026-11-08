@@ -1,0 +1,212 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+
+const domains = [
+  {
+    id: 'architectures',
+    num: '01',
+    title: 'Model Architectures & Topology',
+    status: 'Implemented' as const,
+    summary: 'Evaluating foundational computational blocks: Causal Transformers, State Spaces, and Recurrent Arms.',
+    content: `
+      Chakaso investigates how different foundational operators shape representation capacity, inductive biases, and sequence processing speed. Rather than adopting standard recipes blindly, we train architectures from random initialization to observe convergence behaviors directly.
+      
+      Our primary experimental baseline is a causal decoder-only transformer with Pre-LN stabilization and RMSNorm. In parallel, through experiments E2601 and E2602, we measured recurrent/state-space variants on standardized character-level corpora to measure parameter efficiency and long-range coherence bounds.
+    `,
+    metrics: [
+      { label: 'Baseline Topology', val: 'Causal Decoder Transformer' },
+      { label: 'Layer Normalization', val: 'Pre-LN / RMSNorm' },
+      { label: 'Positional Scheme', val: 'Learned & RoPE' }
+    ]
+  },
+  {
+    id: 'representation',
+    num: '02',
+    title: 'Representation, Encodings & Tokenization',
+    status: 'Implemented' as const,
+    summary: 'Deterministic subword vocabularies with lossless byte fallbacks and word-boundary isolation.',
+    content: `
+      Tokenization is the foundational translation layer between human language and vector mathematics. A deficient tokenizer introduces permanent representational artifacts that no amount of transformer compute can overcome.
+      
+      Chakaso implemented a Byte-Pair Encoding (BPE) subword tokenizer (4,096 tokens) equipped with a deterministic pre-tokenizer that forbids merges across word boundaries. Furthermore, its byte-level base ensures total encoding coverage with zero unknown tokens ([UNK]), deterministic tie-breaking, and self-describing checksum validation on load.
+    `,
+    metrics: [
+      { label: 'Vocabulary Size', val: '4,096 BPE Subwords' },
+      { label: 'Base Coverage', val: 'Total (Byte-Level Fallback)' },
+      { label: 'Integrity Verification', val: 'SHA-256 Contract Checksum' }
+    ]
+  },
+  {
+    id: 'learning',
+    num: '03',
+    title: 'Learning Dynamics & Optimization',
+    status: 'Experimenting' as const,
+    summary: 'Measuring loss surface geometry, gradient propagation, and learning-rate schedules.',
+    content: `
+      Training language models without catastrophic divergence requires rigorous gradient tracking and stabilization. We analyze warmup schedules, cosine decay profiles, and weight decay sensitivities under strict compute constraints.
+      
+      Through experiments E2605 to E2608, we monitored step-wise validation loss, cross-entropy distributions, and gradient norms across multiple epochs, establishing empirical learning curves that confirm sustained optimization progress without overfitting small corpora.
+    `,
+    metrics: [
+      { label: 'Optimizer', val: 'AdamW with Decoupled Weight Decay' },
+      { label: 'Scheduler', val: 'Cosine Decay with Linear Warmup' },
+      { label: 'Precision', val: 'Float32 / Mixed Precision' }
+    ]
+  },
+  {
+    id: 'systems',
+    num: '04',
+    title: 'Computational Systems & Infrastructure',
+    status: 'Implemented' as const,
+    summary: 'Zero-dependency Python runtimes, standard-library HTTP serving, and offline CPU verification.',
+    content: `
+      Machine intelligence systems should not be brittle monoliths dependent on thousands of transitive third-party packages. Chakaso prioritizes local-first, verifiable system design.
+      
+      Under ADR-0038, we implemented an HTTP serving adapter utilizing only Python\'s standard library. It provides loopback streaming SSE (/v1/chat/completions) with bounded concurrency and automatic client-disconnect cancellation. Our CI matrix validates the entire codebase across three strict tiers on CPU, guaranteeing complete offline reproducibility.
+    `,
+    metrics: [
+      { label: 'Serving Runtime', val: 'Python Standard Library (Zero-Dep)' },
+      { label: 'CI Verification', val: '3 Tiers (Core, Train, Model Path)' },
+      { label: 'Concurrency', val: 'Bounded Loopback Server' }
+    ]
+  },
+  {
+    id: 'evaluation',
+    num: '05',
+    title: 'Evaluation Methodology & Statistical Rigor',
+    status: 'Implemented' as const,
+    summary: 'Held-out bits-per-character metrics, whole-work author splits, and Holm–Bonferroni corrections.',
+    content: `
+      Benchmark gamification is the primary affliction of modern AI claims. Chakaso adopts a strict empirical standard: held-out bits per character (bpc) evaluated over whole-work splits where validation documents share zero overlap with training data.
+      
+      When evaluating comparative model arms, we mandate non-parametric statistical checks and family-wise error rate corrections (Holm–Bonferroni). When tests show no statistically significant separation between model arms, we explicitly document that no claim of superiority can be made.
+    `,
+    metrics: [
+      { label: 'Held-Out Metric', val: '1.6865 bpc (Gutenberg Prose v2)' },
+      { label: 'Data Isolation', val: 'Whole-Work Author Splits' },
+      { label: 'Statistical Gate', val: 'Holm–Bonferroni Family-Wise Check' }
+    ]
+  },
+  {
+    id: 'efficiency',
+    num: '06',
+    title: 'Efficient Intelligence & Parameter Density',
+    status: 'Planned' as const,
+    summary: 'Exploring maximum semantic compression per parameter and grounded retrieval interfaces.',
+    content: `
+      True engineering elegance lies in doing more with less. Chakaso investigates parameter density: extracting maximum structural and syntactic capability out of compact models (1M to 50M parameters).
+      
+      By pairing compact neural models with deterministic application-layer grounding (BM25 retrieval, citation verification, and factual consistency checks), we explore systems that achieve verifiable correctness without requiring hundreds of billions of ungrounded parameters.
+    `,
+    metrics: [
+      { label: 'Target Model Size', val: '1M – 50M Parameters' },
+      { label: 'Grounding Adapter', val: 'BM25 / Dense Hybrid' },
+      { label: 'Verification Goal', val: 'Verifiable Evidence Attribution' }
+    ]
+  }
+];
+---
+
+<Layout
+  title="Research Program & Methodology — Chakaso"
+  description="Comprehensive research overview: model architectures, tokenization, optimization dynamics, reproducibility, and empirical verification."
+  currentPath="/research"
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    
+    <!-- Hero / Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Research Program</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
+        The Architecture of Investigation
+      </h1>
+
+      <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
+        Chakaso conducts transparent, grounded exploration of machine intelligence from first principles. We design architectures, assemble verified corpora, train weights from scratch, and report empirical results without inflation.
+      </p>
+    </div>
+
+    <!-- Core Tenets Banner -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/80 mb-20">
+      <div class="flex flex-col gap-2">
+        <div class="font-mono text-xs text-indigo-400 uppercase tracking-wider">Provenance</div>
+        <div class="text-sm font-semibold text-white">Controlled Datasets</div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Every training sample is traced to a verified document with committed SHA-256 digests and explicit licensing (Apache-2.0, Public Domain).
+        </p>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="font-mono text-xs text-indigo-400 uppercase tracking-wider">Reproducibility</div>
+        <div class="text-sm font-semibold text-white">Deterministic Execution</div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Identical random seeds, immutable tokenizers, and locked configs guarantee that any trained checkpoint can be reproduced independently.
+        </p>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="font-mono text-xs text-indigo-400 uppercase tracking-wider">Restraint</div>
+        <div class="text-sm font-semibold text-white">Documented Limitations</div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          We explicitly withhold claims of general assistant capability when models only exhibit baseline language modelling convergence.
+        </p>
+      </div>
+    </div>
+
+    <!-- Six Research Domains Detailed -->
+    <div class="flex flex-col gap-16">
+      <SectionHeader
+        index="PROGRAM"
+        tag="AREAS"
+        title="Six Foundational Disciplines"
+        description="Detailed exploration of each technical domain under active investigation within the Chakaso codebase."
+      />
+
+      <div class="flex flex-col gap-12">
+        {domains.map((d) => (
+          <article id={d.id} class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14]/70 hover:border-indigo-500/30 transition-all duration-300">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-6 border-b border-white/[0.06]">
+              <div class="max-w-2xl">
+                <div class="flex items-center gap-3 mb-2 font-mono text-xs">
+                  <span class="text-indigo-400 font-semibold">{d.num}</span>
+                  <span class="text-slate-600">/</span>
+                  <span class="text-slate-400 uppercase tracking-wider">Domain</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight">
+                  {d.title}
+                </h2>
+                <p class="mt-2 text-sm text-slate-400 font-sans">
+                  {d.summary}
+                </p>
+              </div>
+
+              <div class="shrink-0">
+                <StatusBadge status={d.status} size="md" />
+              </div>
+            </div>
+
+            <!-- Content Body -->
+            <div class="py-6 text-sm sm:text-base text-slate-300 leading-relaxed font-sans max-w-4xl space-y-4">
+              <p>{d.content}</p>
+            </div>
+
+            <!-- Metrics / Key Specs -->
+            <div class="pt-6 border-t border-white/[0.06] grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {d.metrics.map((m) => (
+                <div class="p-3.5 rounded-lg border border-white/[0.04] bg-white/[0.02]">
+                  <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">{m.label}</div>
+                  <div class="text-xs font-mono font-medium text-slate-200 mt-1">{m.val}</div>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</Layout>

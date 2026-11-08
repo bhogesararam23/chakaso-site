@@ -1,0 +1,213 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import ArchitectureFlow from '../components/ArchitectureFlow.astro';
+
+const transformerComponents = [
+  {
+    title: 'Pre-Layer Normalization (RMSNorm)',
+    spec: 'dim = 256, eps = 1e-6',
+    desc: 'Stabilises gradient variances across deep stacks by normalising activations prior to attention and feed-forward blocks, avoiding internal covariate shift during early training phases.',
+    status: 'Implemented' as const
+  },
+  {
+    title: 'Causal Multi-Head Self-Attention',
+    spec: 'n_heads = 4, d_k = 64, d_v = 64',
+    desc: 'Four parallel attention heads operating over a strict lower-triangular causal mask to ensure autoregressive generation where token t cannot attend to token t+k.',
+    status: 'Implemented' as const
+  },
+  {
+    title: 'SwiGLU Non-Linear Feed-Forward Block',
+    spec: 'd_ffn = 1,024 (4 × d_model)',
+    desc: 'Gated linear unit with Swish activation, providing higher parameter expressiveness and smoother gradient flow compared to traditional ReLU or standard GELU activations.',
+    status: 'Implemented' as const
+  },
+  {
+    title: 'Residual Connections',
+    spec: 'x + Layer(RMSNorm(x))',
+    desc: 'Identity skip pathways around both the attention and feed-forward sub-layers, allowing unimpeded backpropagation through all 6 transformer depths.',
+    status: 'Implemented' as const
+  }
+];
+
+const servingSpecs = [
+  { label: 'Runtime Library', value: 'Python Standard Library' },
+  { label: 'Protocols', value: 'HTTP/1.1 Loopback, Server-Sent Events' },
+  { label: 'Endpoints', value: '/health, /v1/models, /v1/chat/completions' },
+  { label: 'Cancellation', value: 'Immediate generator teardown on client disconnect' },
+  { label: 'Concurrency', value: 'Bounded thread worker pool' },
+  { label: 'Security', value: 'No auth bypass, loopback bound by default' }
+];
+---
+
+<Layout
+  title="System Architecture — Chakaso"
+  description="Technical architecture of Chakaso: causal transformer topology, subword tokenization, latent representations, and standard-library serving."
+  currentPath="/architecture"
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    
+    <!-- Hero / Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Technical Architecture</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
+        The Computational Engine
+      </h1>
+
+      <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
+        A deep architectural breakdown of Chakaso\'s neural pipelines: from subword discretization and high-dimensional embeddings to causal multi-head self-attention and zero-dependency local serving.
+      </p>
+    </div>
+
+    <!-- 1. High-Level System Flow -->
+    <div class="mb-20">
+      <SectionHeader
+        index="01"
+        tag="PIPELINE"
+        title="High-Level Ingestion & Computation Flow"
+        description="Every incoming prompt or document passes through strict mathematical boundaries before reaching the latent embedding space."
+      />
+
+      <ArchitectureFlow />
+    </div>
+
+    <!-- 2. The Transformer Block Blueprint -->
+    <div class="mb-20">
+      <SectionHeader
+        index="02"
+        tag="NEURAL CORE"
+        title="Decoder Layer Anatomy"
+        description="Detailed specifications of the causal transformer block used in the 3.41M parameter baseline model."
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {transformerComponents.map((comp) => (
+          <div class="p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="font-mono text-xs text-indigo-400 font-semibold">{comp.spec}</span>
+                <StatusBadge status={comp.status} size="sm" />
+              </div>
+              <h3 class="text-lg font-semibold text-white mb-2">{comp.title}</h3>
+              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
+                {comp.desc}
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.05] text-[11px] font-mono text-slate-500">
+              Module: <span class="text-slate-400">chakaso.training.transformer</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- 3. Mathematical Specifications & Tensor Dimensions -->
+    <div class="mb-20">
+      <SectionHeader
+        index="03"
+        tag="SPECIFICATIONS"
+        title="Tensor Dimensions & Model Geometry"
+        description="Exact shapes and hyperparameters governing the current baseline checkpoint (E2608)."
+      />
+
+      <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14] overflow-x-auto">
+        <table class="w-full text-left font-mono text-xs text-slate-300">
+          <thead>
+            <tr class="border-b border-white/10 text-slate-500 uppercase tracking-wider text-[11px]">
+              <th class="pb-4 pr-6">Hyperparameter</th>
+              <th class="pb-4 pr-6">Symbol</th>
+              <th class="pb-4 pr-6">Value</th>
+              <th class="pb-4">Engineering Purpose</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/[0.05]">
+            <tr>
+              <td class="py-3.5 pr-6 font-semibold text-white">Parameter Count</td>
+              <td class="py-3.5 pr-6 text-indigo-400">N</td>
+              <td class="py-3.5 pr-6 text-slate-200">3,412,480</td>
+              <td class="py-3.5 text-slate-400">Compact research baseline designed for CPU reproducibility</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-6 font-semibold text-white">Embedding Dimension</td>
+              <td class="py-3.5 pr-6 text-indigo-400">d_model</td>
+              <td class="py-3.5 pr-6 text-slate-200">256</td>
+              <td class="py-3.5 text-slate-400">Latent representation vector width per token</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-6 font-semibold text-white">Context Window</td>
+              <td class="py-3.5 pr-6 text-indigo-400">T</td>
+              <td class="py-3.5 pr-6 text-slate-200">256 positions</td>
+              <td class="py-3.5 text-slate-400">Maximum autoregressive sequence length evaluated</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-6 font-semibold text-white">Vocabulary Size</td>
+              <td class="py-3.5 pr-6 text-indigo-400">V</td>
+              <td class="py-3.5 pr-6 text-slate-200">4,096 tokens</td>
+              <td class="py-3.5 text-slate-400">Subword BPE vocabulary with deterministic byte fallback</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-6 font-semibold text-white">Number of Layers</td>
+              <td class="py-3.5 pr-6 text-indigo-400">L</td>
+              <td class="py-3.5 pr-6 text-slate-200">6 blocks</td>
+              <td class="py-3.5 text-slate-400">Depth of stacked causal multi-head attention</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-6 font-semibold text-white">Attention Heads</td>
+              <td class="py-3.5 pr-6 text-indigo-400">h</td>
+              <td class="py-3.5 pr-6 text-slate-200">4 heads</td>
+              <td class="py-3.5 text-slate-400">64 dimensions per head (d_k = 64)</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 pr-6 font-semibold text-white">FFN Hidden Width</td>
+              <td class="py-3.5 pr-6 text-indigo-400">d_ffn</td>
+              <td class="py-3.5 pr-6 text-slate-200">1,024</td>
+              <td class="py-3.5 text-slate-400">SwiGLU intermediate expansion ratio of 4×</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. Standard Library Serving Adapter (ADR-0038) -->
+    <div id="serving" class="mb-12">
+      <SectionHeader
+        index="04"
+        tag="RUNTIME"
+        title="Zero-Dependency Local Serving (ADR-0038)"
+        description="An isolated, robust HTTP serving layer written strictly using Python standard-library modules."
+      />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-7 p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+          <p>
+            Unlike typical LLM stacks requiring massive web framework dependencies (FastAPI, Uvicorn, Starlette), Chakaso\'s <code class="text-indigo-300 bg-white/[0.05] px-1 py-0.5 rounded font-mono">chakaso.serve</code> utilizes only Python\'s built-in <code class="text-indigo-300 bg-white/[0.05] px-1 py-0.5 rounded font-mono">http.server</code>.
+          </p>
+          <p>
+            It provides standard OpenAI-compatible endpoints (<code class="text-indigo-300 bg-white/[0.05] px-1 py-0.5 rounded font-mono">/v1/chat/completions</code>) with Server-Sent Events (SSE) streaming. Crucially, if a caller aborts the connection midway through a response, the generator instantly stops executing, preserving compute and preventing runaway loops.
+          </p>
+          <div class="p-4 rounded-lg bg-black/40 border border-white/[0.05] font-mono text-xs text-slate-400 space-y-1">
+            <div class="text-indigo-400"># Start local loopback serving</div>
+            <div>$ python -m chakaso.serve --checkpoint /path/to/e2608 --port 8080</div>
+            <div class="text-emerald-400 pt-1">✓ chakaso.serve listening on 127.0.0.1:8080 (CPU bounded)</div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 flex flex-col gap-3">
+          <span class="text-xs font-mono uppercase tracking-wider text-slate-300 mb-1">Serving Contract Guarantees</span>
+          {servingSpecs.map((s) => (
+            <div class="flex flex-col py-2 border-b border-white/[0.05] last:border-0">
+              <span class="text-[10px] font-mono text-slate-500 uppercase">{s.label}</span>
+              <span class="text-xs font-mono text-slate-200 mt-0.5">{s.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</Layout>
