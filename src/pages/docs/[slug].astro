@@ -1,0 +1,104 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { DOC_SECTIONS, type DocSection } from '../../data/docs';
+
+export function getStaticPaths() {
+  return DOC_SECTIONS.map((doc) => ({
+    params: { slug: doc.slug },
+    props: { doc }
+  }));
+}
+
+interface Props {
+  doc: DocSection;
+}
+
+const { doc } = Astro.props;
+
+// Group docs by category for the sidebar
+const categories = Array.from(new Set(DOC_SECTIONS.map((d) => d.category)));
+---
+
+<Layout
+  title={`${doc.title} — Chakaso Documentation`}
+  description={doc.summary}
+  currentPath={`/docs/${doc.slug}`}
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 font-mono text-xs text-indigo-400 uppercase tracking-widest mb-8">
+      <a href="/docs" class="hover:underline">Documentation</a>
+      <span class="text-slate-600">/</span>
+      <span class="text-slate-400">{doc.category}</span>
+      <span class="text-slate-600">/</span>
+      <span class="text-slate-200">{doc.slug}</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <!-- Left Desktop Sidebar Navigation (Cols 1-4) -->
+      <aside class="lg:col-span-3 sticky top-28 hidden lg:flex flex-col gap-6 p-5 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/80 backdrop-blur-md">
+        <div class="font-mono text-xs uppercase tracking-wider text-slate-400 font-semibold pb-2 border-b border-white/[0.06]">
+          Documentation Hub
+        </div>
+
+        <nav class="flex flex-col gap-6 text-xs">
+          {categories.map((cat) => (
+            <div class="flex flex-col gap-2">
+              <span class="font-mono text-[11px] text-slate-500 uppercase tracking-wider">{cat}</span>
+              <ul class="flex flex-col gap-1 border-l border-white/[0.06] pl-2.5">
+                {DOC_SECTIONS.filter((d) => d.category === cat).map((item) => (
+                  <li>
+                    <a
+                      href={`/docs/${item.slug}`}
+                      class={`block py-1 px-2 rounded transition-colors ${
+                        item.slug === doc.slug
+                          ? 'text-indigo-400 font-medium bg-indigo-500/10 border border-indigo-500/20'
+                          : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03]'
+                      }`}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      </aside>
+
+      <!-- Main Documentation Content (Cols 5-12) -->
+      <article class="lg:col-span-9 p-8 sm:p-12 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/90">
+        <!-- Title & Category -->
+        <div class="pb-8 border-b border-white/[0.08]">
+          <span class="font-mono text-xs uppercase tracking-widest text-indigo-400 block mb-2">{doc.category}</span>
+          <h1 class="text-3xl sm:text-5xl font-bold text-white tracking-tight leading-tight editorial-title">
+            {doc.title}
+          </h1>
+          <p class="mt-4 text-base text-slate-400 font-sans leading-relaxed">
+            {doc.summary}
+          </p>
+        </div>
+
+        <!-- Documentation Body -->
+        <div class="py-8 prose prose-invert max-w-none text-slate-300 font-sans text-sm sm:text-base leading-relaxed space-y-6">
+          <div class="whitespace-pre-line leading-relaxed font-sans">
+            {doc.content}
+          </div>
+        </div>
+
+        <!-- Provenance Footer -->
+        <div class="mt-12 pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs text-slate-500">
+          <div>
+            <span>Verified source: </span>
+            <span class="text-slate-300">{doc.sourceIdentifier}</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="/docs" class="text-indigo-400 hover:underline">
+              &larr; Documentation Hub
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</Layout>

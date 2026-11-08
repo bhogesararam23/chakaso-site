@@ -9,8 +9,8 @@ import StatusBadge from './StatusBadge.astro';
   <div class="max-w-7xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/[0.06]">
       
-      <!-- Brand & Mission statement (Col 1-5) -->
-      <div class="md:col-span-5 flex flex-col gap-4">
+      <!-- Brand & Mission statement (Col 1-4) -->
+      <div class="md:col-span-4 flex flex-col gap-4">
         <div class="flex items-center gap-3">
           <div class="w-7 h-7 rounded border border-white/10 bg-[#0e1117] flex items-center justify-center">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -27,42 +27,61 @@ import StatusBadge from './StatusBadge.astro';
 
         <div class="flex items-center gap-2 pt-2">
           <StatusBadge status="Experimenting" size="sm" />
-          <span class="text-[11px] font-mono text-slate-500">v0.1.0 Research Baseline</span>
+          <span class="text-[11px] font-mono text-slate-500">Chakaso Base 0.1.0 · Level 2</span>
         </div>
       </div>
 
-      <!-- Navigation Links (Col 6-8) -->
+      <!-- Research Program (Col 5-7) -->
       <div class="md:col-span-3 flex flex-col gap-3">
-        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Navigation</span>
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Research Program</span>
         <ul class="flex flex-col gap-2 text-xs text-slate-400">
-          <li><a href="/research" class="hover:text-indigo-400 transition-colors">Research Domains</a></li>
-          <li><a href="/architecture" class="hover:text-indigo-400 transition-colors">Architecture Breakdown</a></li>
-          <li><a href="/models" class="hover:text-indigo-400 transition-colors">Experimental Baseline</a></li>
-          <li><a href="/journal" class="hover:text-indigo-400 transition-colors">Research Journal & ADRs</a></li>
-          <li><a href="/about" class="hover:text-indigo-400 transition-colors">Principles & Vision</a></li>
+          <li><a href="/research" class="hover:text-indigo-400 transition-colors">Program Overview</a></li>
+          <li><a href="/research/experiments" class="hover:text-indigo-400 transition-colors">Experiment Archive (E2601–E2636)</a></li>
+          <li><a href="/research/methodology" class="hover:text-indigo-400 transition-colors">Methodology & Error Bands</a></li>
+          <li><a href="/research/data" class="hover:text-indigo-400 transition-colors">Data Provenance & Corpora</a></li>
+          <li><a href="/research/evaluation" class="hover:text-indigo-400 transition-colors">Evaluation & Split Integrity</a></li>
         </ul>
       </div>
 
-      <!-- Engineering & Provenance (Col 9-12) -->
-      <div class="md:col-span-4 flex flex-col gap-3">
-        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Repository & Contract</span>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          Weights trained from random initialisation. Zero unverified claims. Controlled data provenance and Apache-2.0 licensed code.
-        </p>
-        <div class="pt-2 flex flex-col gap-1.5 font-mono text-[11px] text-slate-500">
+      <!-- System & Docs (Col 8-10) -->
+      <div class="md:col-span-3 flex flex-col gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">System & Artifacts</span>
+        <ul class="flex flex-col gap-2 text-xs text-slate-400">
+          <li><a href="/models" class="hover:text-indigo-400 transition-colors">Chakaso Base 0.1.0 Profile</a></li>
+          <li><a href="/architecture" class="hover:text-indigo-400 transition-colors">Causal Decoder Architecture</a></li>
+          <li><a href="/docs" class="hover:text-indigo-400 transition-colors">Technical Documentation</a></li>
+          <li><a href="/journal" class="hover:text-indigo-400 transition-colors">Architectural Decision Records</a></li>
+          <li><a href="/about" class="hover:text-indigo-400 transition-colors">Principles & Ethos</a></li>
+        </ul>
+      </div>
+
+      <!-- Provenance & Source (Col 11-12) -->
+      <div class="md:col-span-2 flex flex-col gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-300">Repository</span>
+        <div class="flex flex-col gap-2 text-xs text-slate-400">
           <a
             href="https://github.com/bhogesararam23/chakaso"
             target="_blank"
             rel="noopener noreferrer"
             class="text-indigo-400/90 hover:text-indigo-300 transition-colors inline-flex items-center gap-1.5"
           >
-            <span>github.com/bhogesararam23/chakaso</span>
+            <span>Model Repository</span>
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
-          <span>Canonical: <span class="text-slate-400">chakaso.tech</span></span>
-          <span>License: <span class="text-slate-400">Apache-2.0</span></span>
+          <a
+            href="https://github.com/bhogesararam23/chakaso-site"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-slate-400 hover:text-slate-200 transition-colors inline-flex items-center gap-1.5"
+          >
+            <span>Website Source</span>
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+          <span class="text-[11px] font-mono text-slate-500 pt-1">License: Apache-2.0</span>
         </div>
       </div>
 
@@ -75,7 +94,7 @@ import StatusBadge from './StatusBadge.astro';
       </div>
       <div class="flex items-center gap-6">
         <span>Deterministic Seeds</span>
-        <span>Proven Datasets</span>
+        <span>Whole-Work Splits</span>
         <span>Level 2 Release Gate</span>
       </div>
     </div>

@@ -3,56 +3,74 @@ import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 import ArchitectureFlow from '../components/ArchitectureFlow.astro';
+import TokenizerExplorer from '../components/TokenizerExplorer';
 
-const transformerComponents = [
+const lifecycles = [
   {
-    title: 'Pre-Layer Normalization (RMSNorm)',
-    spec: 'dim = 256, eps = 1e-6',
-    desc: 'Stabilises gradient variances across deep stacks by normalising activations prior to attention and feed-forward blocks, avoiding internal covariate shift during early training phases.',
-    status: 'Implemented' as const
+    step: 'Stage 01',
+    title: 'Data Ingestion & Manifest Pinning',
+    status: 'Implemented' as const,
+    summary: 'Source corpora are normalized into 16,384-character chapter chunks with whitespace fidelity. Documents are hashed into immutable SHA-256 manifests (ADR-0047).',
+    boundary: 'chakaso.training.manifest'
   },
   {
-    title: 'Causal Multi-Head Self-Attention',
-    spec: 'n_heads = 4, d_k = 64, d_v = 64',
-    desc: 'Four parallel attention heads operating over a strict lower-triangular causal mask to ensure autoregressive generation where token t cannot attend to token t+k.',
-    status: 'Implemented' as const
+    step: 'Stage 02',
+    title: 'Space-Prefixed Subword Tokenization',
+    status: 'Implemented' as const,
+    summary: 'Byte-Pair Encoding with 4,096 tokens, boundary-isolated word merges (no cross-word leakage), space-prefix folding (ADR-0051), and total byte-level fallback.',
+    boundary: 'chakaso.training.subword'
   },
   {
-    title: 'SwiGLU Non-Linear Feed-Forward Block',
-    spec: 'd_ffn = 1,024 (4 × d_model)',
-    desc: 'Gated linear unit with Swish activation, providing higher parameter expressiveness and smoother gradient flow compared to traditional ReLU or standard GELU activations.',
-    status: 'Implemented' as const
+    step: 'Stage 03',
+    title: 'Rotary Decoder Transformer Core',
+    status: 'Implemented' as const,
+    summary: '6 causal decoder layers with Pre-LN RMSNorm, RoPE rotary positional bindings, 4 attention heads (d_k = 64), and SwiGLU gated linear units (d_ffn = 1,024).',
+    boundary: 'chakaso.training.transformer'
   },
   {
-    title: 'Residual Connections',
-    spec: 'x + Layer(RMSNorm(x))',
-    desc: 'Identity skip pathways around both the attention and feed-forward sub-layers, allowing unimpeded backpropagation through all 6 transformer depths.',
-    status: 'Implemented' as const
+    step: 'Stage 04',
+    title: 'Bounded Optimization & Resumption',
+    status: 'Implemented' as const,
+    summary: 'AdamW with decoupled weight decay (0.1), cosine annealing scheduler, linear warmup, and atomic resumption contracts that survive machine interruption (ADR-0053).',
+    boundary: 'chakaso.training.optimizer'
+  },
+  {
+    step: 'Stage 05',
+    title: 'Whole-Work Statistical Evaluation',
+    status: 'Implemented' as const,
+    summary: 'Cross-entropy bits-per-character accounting over completely isolated whole works (ADR-0042) paired with Holm–Bonferroni family-wise error bounds.',
+    boundary: 'chakaso.training.evaluation'
+  },
+  {
+    step: 'Stage 06',
+    title: 'Zero-Dependency HTTP Loopback Serving',
+    status: 'Implemented' as const,
+    summary: 'OpenAI-compatible /v1/chat/completions server built solely with Python standard-library http.server, featuring streaming SSE and instant socket abort cancellation (ADR-0038).',
+    boundary: 'chakaso.serve'
   }
 ];
 
 const servingSpecs = [
-  { label: 'Runtime Library', value: 'Python Standard Library' },
-  { label: 'Protocols', value: 'HTTP/1.1 Loopback, Server-Sent Events' },
+  { label: 'Runtime Library', value: 'Python Standard Library (Zero external dependencies)' },
+  { label: 'Protocols', value: 'HTTP/1.1 Loopback (127.0.0.1), Server-Sent Events (SSE)' },
   { label: 'Endpoints', value: '/health, /v1/models, /v1/chat/completions' },
-  { label: 'Cancellation', value: 'Immediate generator teardown on client disconnect' },
-  { label: 'Concurrency', value: 'Bounded thread worker pool' },
-  { label: 'Security', value: 'No auth bypass, loopback bound by default' }
+  { label: 'Client Cancellation', value: 'Instant generator teardown when client disconnects socket' },
+  { label: 'Worker Concurrency', value: 'Bounded thread worker pool with loopback isolation' },
+  { label: 'Security Boundary', value: 'Local-only execution, zero remote API transmission' }
 ];
 ---
 
 <Layout
-  title="System Architecture — Chakaso"
-  description="Technical architecture of Chakaso: causal transformer topology, subword tokenization, latent representations, and standard-library serving."
+  title="System Architecture & Computational Pipeline — Chakaso"
+  description="Technical architecture of Chakaso: causal rotary decoder, space-prefixed BPE, Pre-LN RMSNorm, tensor shapes, and zero-dependency HTTP serving."
   currentPath="/architecture"
 >
   <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
-    
     <!-- Hero / Header -->
     <div class="max-w-3xl mb-16">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Technical Architecture</span>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">System Blueprint</span>
       </div>
 
       <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
@@ -60,59 +78,71 @@ const servingSpecs = [
       </h1>
 
       <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
-        A deep architectural breakdown of Chakaso\'s neural pipelines: from subword discretization and high-dimensional embeddings to causal multi-head self-attention and zero-dependency local serving.
+        A deep architectural breakdown of Chakaso's neural and runtime systems: from immutable corpus ingestion and space-prefixed tokenization to causal rotary attention and zero-dependency local serving.
       </p>
     </div>
 
-    <!-- 1. High-Level System Flow -->
+    <!-- 1. High-Level Computational Flow -->
     <div class="mb-20">
       <SectionHeader
         index="01"
         tag="PIPELINE"
         title="High-Level Ingestion & Computation Flow"
-        description="Every incoming prompt or document passes through strict mathematical boundaries before reaching the latent embedding space."
+        description="Every prompt or corpus document passes through strict mathematical boundaries before reaching the latent embedding space."
       />
 
       <ArchitectureFlow />
     </div>
 
-    <!-- 2. The Transformer Block Blueprint -->
+    <!-- 2. Interactive Tokenizer Explorer Island -->
     <div class="mb-20">
       <SectionHeader
         index="02"
-        tag="NEURAL CORE"
-        title="Decoder Layer Anatomy"
-        description="Detailed specifications of the causal transformer block used in the 3.41M parameter baseline model."
+        tag="TOKENIZER"
+        title="Subword Tokenization & Byte Fallback (ADR-0051)"
+        description="Test how the space-prefixed Byte-Pair Encoding pre-tokenizer operates in real time with boundary preservation."
       />
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {transformerComponents.map((comp) => (
+      <TokenizerExplorer client:visible />
+    </div>
+
+    <!-- 3. Lifecycle Stages Grid -->
+    <div class="mb-20">
+      <SectionHeader
+        index="03"
+        tag="LIFECYCLE"
+        title="End-to-End Model Lifecycle"
+        description="The six sequential stages through which raw text is transformed into a verified, servable checkpoint."
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {lifecycles.map((stage) => (
           <div class="p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between mb-3">
-                <span class="font-mono text-xs text-indigo-400 font-semibold">{comp.spec}</span>
-                <StatusBadge status={comp.status} size="sm" />
+                <span class="font-mono text-xs text-indigo-400 font-semibold">{stage.step}</span>
+                <StatusBadge status={stage.status} size="sm" />
               </div>
-              <h3 class="text-lg font-semibold text-white mb-2">{comp.title}</h3>
+              <h3 class="text-lg font-semibold text-white mb-2">{stage.title}</h3>
               <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
-                {comp.desc}
+                {stage.summary}
               </p>
             </div>
             <div class="mt-4 pt-3 border-t border-white/[0.05] text-[11px] font-mono text-slate-500">
-              Module: <span class="text-slate-400">chakaso.training.transformer</span>
+              Module: <span class="text-slate-400">{stage.boundary}</span>
             </div>
           </div>
         ))}
       </div>
     </div>
 
-    <!-- 3. Mathematical Specifications & Tensor Dimensions -->
+    <!-- 4. Mathematical Specifications & Tensor Dimensions -->
     <div class="mb-20">
       <SectionHeader
-        index="03"
+        index="04"
         tag="SPECIFICATIONS"
         title="Tensor Dimensions & Model Geometry"
-        description="Exact shapes and hyperparameters governing the current baseline checkpoint (E2608)."
+        description="Exact shapes and hyperparameters governing the reference baseline model (E2608 / E2636)."
       />
 
       <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14] overflow-x-auto">
@@ -129,7 +159,7 @@ const servingSpecs = [
             <tr>
               <td class="py-3.5 pr-6 font-semibold text-white">Parameter Count</td>
               <td class="py-3.5 pr-6 text-indigo-400">N</td>
-              <td class="py-3.5 pr-6 text-slate-200">3,412,480</td>
+              <td class="py-3.5 pr-6 text-slate-200">3,413,760</td>
               <td class="py-3.5 text-slate-400">Compact research baseline designed for CPU reproducibility</td>
             </tr>
             <tr>
@@ -173,10 +203,10 @@ const servingSpecs = [
       </div>
     </div>
 
-    <!-- 4. Standard Library Serving Adapter (ADR-0038) -->
+    <!-- 5. Zero-Dependency Serving Adapter (ADR-0038) -->
     <div id="serving" class="mb-12">
       <SectionHeader
-        index="04"
+        index="05"
         tag="RUNTIME"
         title="Zero-Dependency Local Serving (ADR-0038)"
         description="An isolated, robust HTTP serving layer written strictly using Python standard-library modules."
@@ -185,13 +215,13 @@ const servingSpecs = [
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div class="lg:col-span-7 p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
           <p>
-            Unlike typical LLM stacks requiring massive web framework dependencies (FastAPI, Uvicorn, Starlette), Chakaso\'s <code class="text-indigo-300 bg-white/[0.05] px-1 py-0.5 rounded font-mono">chakaso.serve</code> utilizes only Python\'s built-in <code class="text-indigo-300 bg-white/[0.05] px-1 py-0.5 rounded font-mono">http.server</code>.
+            Unlike typical LLM stacks requiring massive web framework dependencies (FastAPI, Uvicorn, Starlette), Chakaso's <code class="text-indigo-300 bg-white/[0.05] px-1 py-0.5 rounded font-mono">chakaso.serve</code> utilizes only Python's built-in <code class="text-indigo-300 bg-white/[0.05] px-1 py-0.5 rounded font-mono">http.server</code>.
           </p>
           <p>
             It provides standard OpenAI-compatible endpoints (<code class="text-indigo-300 bg-white/[0.05] px-1 py-0.5 rounded font-mono">/v1/chat/completions</code>) with Server-Sent Events (SSE) streaming. Crucially, if a caller aborts the connection midway through a response, the generator instantly stops executing, preserving compute and preventing runaway loops.
           </p>
           <div class="p-4 rounded-lg bg-black/40 border border-white/[0.05] font-mono text-xs text-slate-400 space-y-1">
-            <div class="text-indigo-400"># Start local loopback serving</div>
+            <div class="text-indigo-400"># Start local loopback serving on CPU</div>
             <div>$ python -m chakaso.serve --checkpoint /path/to/e2608 --port 8080</div>
             <div class="text-emerald-400 pt-1">✓ chakaso.serve listening on 127.0.0.1:8080 (CPU bounded)</div>
           </div>
@@ -208,6 +238,5 @@ const servingSpecs = [
         </div>
       </div>
     </div>
-
   </div>
 </Layout>

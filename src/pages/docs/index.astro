@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import { DOC_SECTIONS } from '../../data/docs';
+
+const categories = Array.from(new Set(DOC_SECTIONS.map((d) => d.category)));
+---
+
+<Layout
+  title="Documentation Hub — Chakaso"
+  description="Technical documentation for Chakaso: Python library interface, causal transformer architecture, tokenization, training pipelines, and local HTTP serving."
+  currentPath="/docs"
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    <!-- Hero / Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Technical Reference</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
+        Documentation Hub
+      </h1>
+
+      <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
+        Complete, on-site technical guides for the Chakaso research system. Everything documented here is verified directly against the underlying Python codebase.
+      </p>
+    </div>
+
+    <!-- Quick Navigation Category Grid -->
+    <div class="flex flex-col gap-12 mb-20">
+      {categories.map((cat) => (
+        <div>
+          <h2 class="text-xs font-mono uppercase tracking-widest text-indigo-400 mb-6 pb-2 border-b border-white/[0.08]">
+            {cat}
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {DOC_SECTIONS.filter((d) => d.category === cat).map((item) => (
+              <a
+                href={`/docs/${item.slug}`}
+                class="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/80 hover:bg-[#12151b] hover:border-indigo-500/40 transition-all duration-300 flex flex-col justify-between group"
+              >
+                <div>
+                  <h3 class="text-lg font-semibold text-white group-hover:text-indigo-300 transition-colors flex items-center justify-between">
+                    <span>{item.title}</span>
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform text-slate-500 group-hover:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </h3>
+                  <p class="mt-3 text-xs text-slate-400 leading-relaxed font-sans">
+                    {item.summary}
+                  </p>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-slate-500">
+                  <span class="truncate">{item.sourceIdentifier}</span>
+                  <span class="text-indigo-400 font-medium">Read &rarr;</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Architecture & Contract Guarantee -->
+    <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <div>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-400 block mb-1">Zero Cloud Lock-In</span>
+        <h3 class="text-lg font-semibold text-white">100% Offline & Statically Baked</h3>
+        <p class="text-xs text-slate-400 mt-1 max-w-xl">
+          The documentation on chakaso.tech does not make dynamic GitHub API calls or require network authentication. It is statically rendered and independently verifiable.
+        </p>
+      </div>
+      <div>
+        <a
+          href="/docs/getting-started"
+          class="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-mono text-xs uppercase tracking-wider transition-colors inline-block"
+        >
+          Quick Start Guide
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <!-- Dark void background -->
+  <rect width="1200" height="630" fill="#07080a"/>
+  
+  <!-- Subtle coordinate grid -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow-violet" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#07080a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow-blue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#07080a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#grid)" />
+  <circle cx="880" cy="315" r="320" fill="url(#glow-violet)"/>
+  <circle cx="1000" cy="380" r="240" fill="url(#glow-blue)"/>
+
+  <!-- Left Content: Brand & Typography -->
+  <g transform="translate(100, 140)">
+    <!-- Brand Monogram + Title -->
+    <g transform="translate(0, 0)">
+      <rect width="48" height="48" rx="10" fill="#0e1117" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1.5"/>
+      <path d="M24 10L36 17V31L24 38L12 31V17L24 10Z" stroke="#818cf8" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="24" cy="24" r="4" fill="#a855f7"/>
+      <line x1="24" y1="10" x2="24" y2="20" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2 2"/>
+      <line x1="24" y1="28" x2="24" y2="38" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2 2"/>
+      <text x="64" y="32" font-family="'Inter', sans-serif" font-size="22" font-weight="700" fill="#f8fafc" letter-spacing="2">CHAKASO</text>
+    </g>
+
+    <!-- Tagline -->
+    <text x="0" y="125" font-family="'Inter', sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="-1.5">
+      Intelligence,
+    </text>
+    <text x="0" y="185" font-family="'Inter', sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="-1.5">
+      engineered from
+    </text>
+    <text x="0" y="245" font-family="'Inter', sans-serif" font-size="52" font-weight="700" fill="#a5b4fc" letter-spacing="-1.5">
+      first principles.
+    </text>
+
+    <!-- Supporting description -->
+    <text x="0" y="305" font-family="'Inter', sans-serif" font-size="20" fill="#94a3b8" font-weight="400">
+      An independent exploration of language models and machine intelligence.
+    </text>
+
+    <!-- Badges / Metadata -->
+    <g transform="translate(0, 360)">
+      <rect width="180" height="34" rx="6" fill="rgba(129, 140, 248, 0.1)" stroke="rgba(129, 140, 248, 0.3)"/>
+      <circle cx="16" cy="17" r="4" fill="#818cf8"/>
+      <text x="30" y="22" font-family="'JetBrains Mono', monospace" font-size="12" fill="#c7d2fe" font-weight="500">3.41M BASELINE</text>
+
+      <rect x="195" width="180" height="34" rx="6" fill="rgba(56, 189, 248, 0.1)" stroke="rgba(56, 189, 248, 0.3)"/>
+      <circle cx="211" cy="17" r="4" fill="#38bdf8"/>
+      <text x="225" y="22" font-family="'JetBrains Mono', monospace" font-size="12" fill="#bae6fd" font-weight="500">1.6865 BPC LOSS</text>
+
+      <rect x="390" width="180" height="34" rx="6" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.1)"/>
+      <text x="415" y="22" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8" font-weight="500">CHAKASO.TECH</text>
+    </g>
+  </g>
+
+  <!-- Right Geometric Structure -->
+  <g transform="translate(880, 315)">
+    <!-- Concentric orbital rings -->
+    <circle cx="0" cy="0" r="180" stroke="rgba(129, 140, 248, 0.15)" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <circle cx="0" cy="0" r="120" stroke="rgba(56, 189, 248, 0.15)" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="60" stroke="rgba(168, 85, 247, 0.2)" stroke-width="1.5"/>
+
+    <!-- Central Polytope Nodes -->
+    <polygon points="0,-100 86,-50 86,50 0,100 -86,50 -86,-50" fill="none" stroke="rgba(129, 140, 248, 0.5)" stroke-width="2"/>
+    <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="none" stroke="rgba(56, 189, 248, 0.6)" stroke-width="1.5"/>
+
+    <!-- Connecting spokes -->
+    <line x1="0" y1="-100" x2="0" y2="100" stroke="rgba(129, 140, 248, 0.3)" stroke-width="1"/>
+    <line x1="-86" y1="-50" x2="86" y2="50" stroke="rgba(129, 140, 248, 0.3)" stroke-width="1"/>
+    <line x1="-86" y1="50" x2="86" y2="-50" stroke="rgba(129, 140, 248, 0.3)" stroke-width="1"/>
+
+    <!-- Vertex nodes -->
+    <circle cx="0" cy="-100" r="5" fill="#ffffff"/>
+    <circle cx="86" cy="-50" r="5" fill="#818cf8"/>
+    <circle cx="86" cy="50" r="5" fill="#38bdf8"/>
+    <circle cx="0" cy="100" r="5" fill="#ffffff"/>
+    <circle cx="-86" cy="50" r="5" fill="#818cf8"/>
+    <circle cx="-86" cy="-50" r="5" fill="#38bdf8"/>
+    <circle cx="0" cy="0" r="8" fill="#a855f7"/>
+  </g>
+</svg>

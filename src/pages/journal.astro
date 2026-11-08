@@ -3,37 +3,95 @@ import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 
-const verifiedADRs = [
+const journalEntries = [
   {
-    id: 'ADR-0039',
-    type: 'Architecture Decision',
+    id: 'DISP-2026-11-04',
+    title: 'Atomic Interruption Recovery for Multi-Seed Studies',
+    date: '2026-11-04',
+    category: 'Engineering Update',
+    tag: 'ADR-0053 · K-040',
+    summary: 'Establishing a strict recovery contract for training on consumer hardware. Resumed runs now verify exact RNG seeds, optimizer moment tensors, and scheduler step offsets through a dedicated 18-test interruption suite.',
+    findings: 'Proves that an interrupted-and-resumed training run produces bit-for-bit identical weights to an uninterrupted execution. Closes bug K-040 where resumption failed to compare the host architecture a checkpoint originated from.',
+    status: 'Implemented' as const
+  },
+  {
+    id: 'DISP-2026-11-03',
+    title: 'Empirical Adoption of Space-Prefixed Byte-Pair Encoding',
+    date: '2026-11-03',
+    category: 'Architecture Decision',
+    tag: 'ADR-0051 · E2625 · E2630',
+    summary: 'Formally replacing standalone space tokenization with space-prefixed BPE across all reference configurations following multi-seed verification in E2625 and E2630.',
+    findings: 'Under strictly matched updates (2,400) and training documents (2,756), space-prefixing lowered held-out loss by 0.023 bpc across all five seeds, exceeding the prose noise floor (0.007 bpc) by over 3×.',
+    status: 'Implemented' as const
+  },
+  {
+    id: 'DISP-2026-11-01',
+    title: 'Quantifying the Empirical Random-Seed Noise Floor',
+    date: '2026-11-01',
+    category: 'Experiment Report',
+    tag: 'E2614 · ADR-0042',
+    summary: 'A 5-seed study of the reference configuration establishing standard deviation bounds across distinct evaluation registers.',
+    findings: 'Measured seed standard deviation of σ = 0.00226 bpc on prose, 0.00337 on the whole pack, and 0.01232 on mathematics. Claims of model superiority on prose must exceed a 3σ threshold (0.007 bpc) to be considered statistically defensible.',
+    status: 'Completed' as const
+  },
+  {
+    id: 'DISP-2026-10-31',
+    title: 'Disentangling Register Mixture Costs with Half-Prose Controls',
+    date: '2026-10-31',
+    category: 'Experiment Report',
+    tag: 'E2613 · E2612',
+    summary: 'Isolating whether the prose loss penalty in the 5-register technical mixture was caused by token starvation or register interference.',
+    findings: 'A prose-only arm trained on half the token volume scored 1.8062 bpc (virtually identical to the full prose control at 1.8093 bpc) compared to the mixture at 1.8395 bpc. Proved that the mixture penalty is driven by spending sequence positions on technical syntax rather than data corruption.',
+    status: 'Completed' as const
+  },
+  {
+    id: 'DISP-2026-10-30',
+    title: 'A Held-Out Score is Held Out by Work, Not by Chunk',
+    date: '2026-10-30',
+    category: 'Evaluation Protocol',
+    tag: 'ADR-0042 · E2608',
+    summary: 'Correcting the historical split methodology used in E2608. Established that all future evaluations must isolate whole works to prevent chapter-level style interpolation.',
+    findings: 'Audit revealed that in E2608, 100% of test characters were chapters from books represented in training. Formalized that E2608 was a within-work split; all subsequent runs enforce whole-work held-out boundaries.',
+    status: 'Implemented' as const
+  },
+  {
+    id: 'DISP-2026-10-29',
+    title: 'Repetition Diagnostics & The Greedy Decoding Collapse',
+    date: '2026-10-29',
+    category: 'Research Finding',
+    tag: 'E2610 · ADR-0039',
+    summary: 'Calibrated parameter sweep across temperature, top-k, and top-p to diagnose phrase repetition in the 3.41M parameter baseline.',
+    findings: 'Proved that greedy decoding repetition (bigram repetition 0.5538) is the mathematical property of greedy decoding on a 3.4M entropy distribution, not a pipeline defect. Stochastic sampling introduces lexical diversity at the expense of immediate syntactic collapse. No decoding parameter setting writes coherent text.',
+    status: 'Completed' as const
+  },
+  {
+    id: 'DISP-2026-10-24',
+    title: 'Ratification of the Three-Level Model Release Gate',
     date: '2026-10-24',
-    title: 'Three-Level Model Release Gate',
-    summary: 'Establishes a mandatory 3-tier release gate. Level 1 (Structural Artifact), Level 2 (Reproducible Integration), and Level 3 (Useful Assistant Behavior). Formally withholds Level 3 until generation meets empirical utility standards.',
+    category: 'Governance Protocol',
+    tag: 'ADR-0039 · MODEL_CARD',
+    summary: 'Establishing mandatory tripartite criteria for model releases: Level 1 (Structural Artifact), Level 2 (Reproducible Integration), and Level 3 (Useful Assistant Behavior).',
+    findings: 'Chakaso Base 0.1.0 satisfies Level 1 and Level 2. Level 3 is formally withheld on empirical evidence, establishing a culture of scientific restraint.',
     status: 'Implemented' as const
   },
   {
-    id: 'ADR-0038',
-    type: 'Engineering Decision',
+    id: 'DISP-2026-10-20',
+    title: 'Zero-Dependency HTTP Serving Adapter from the Standard Library',
     date: '2026-10-20',
-    title: 'Local HTTP Serving Adapter from the Standard Library',
-    summary: 'Implements an OpenAI-compatible /v1/chat/completions server using Python\'s built-in http.server, with SSE streaming, bounded thread concurrency, and instant request cancellation upon disconnect.',
+    category: 'Engineering Decision',
+    tag: 'ADR-0038 · chakaso.serve',
+    summary: 'Implementing an OpenAI-compatible loopback HTTP serving adapter using only Python built-in http.server with SSE streaming and client abort socket teardown.',
+    findings: 'Allows serving checkpoints locally without FastAPI, Uvicorn, or Starlette dependencies. Eliminates over 40 transitive dependencies and runs cleanly in CPU-only CI.',
     status: 'Implemented' as const
   },
   {
-    id: 'ADR-0033',
-    type: 'Product Architecture',
+    id: 'DISP-2026-10-14',
+    title: 'The Model-Centred Product Contract',
     date: '2026-10-14',
-    title: 'Model-Centred Product Contract',
-    summary: 'Defines the Python library as the primary interface for Chakaso. Establishes that the conversational application layer is a consumer of the model, built to measure and check the model rather than disguise it.',
-    status: 'Implemented' as const
-  },
-  {
-    id: 'EXP-E2608',
-    type: 'Experiment Report',
-    date: '2026-10-22',
-    title: 'Causal Decoder Transformer on Gutenberg Prose v2',
-    summary: 'Measured 3.41M parameter causal transformer across 14.5M characters of balanced public domain text. Observed reduction of periodic runs to zero, with mean bigram repetition of 0.5538 and held-out loss of 1.6865 bpc.',
+    category: 'Product Architecture',
+    tag: 'ADR-0033 · Python API',
+    summary: 'Defining the Python library (chakaso.models.load_model) as the authoritative product of the initiative.',
+    findings: 'Establishes that retrieval and conversational application layers exist solely to evaluate and check the trained model rather than disguise its limitations.',
     status: 'Implemented' as const
   }
 ];
@@ -45,7 +103,6 @@ const verifiedADRs = [
   currentPath="/journal"
 >
   <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
-    
     <!-- Hero / Header -->
     <div class="max-w-3xl mb-16">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
@@ -58,47 +115,52 @@ const verifiedADRs = [
       </h1>
 
       <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
-        A chronological archive of architectural decision records (ADRs), experiment logs, and technical notes. We do not manufacture synthetic publications; only verified decisions and measured experiments are documented here.
+        A chronological archive of architectural decision records (ADRs), experiment logs, and engineering updates. We do not manufacture synthetic publications or preprints; only verified decisions and measured experiments are documented here.
       </p>
     </div>
 
-    <!-- 1. Verified Architectural Decisions & Notes -->
-    <div class="mb-20">
-      <SectionHeader
-        index="RECORDS"
-        tag="VERIFIED"
-        title="Architectural Decisions & Experiment Logs"
-        description="Formal engineering decisions ratified in the research repository."
-      />
-
-      <div class="flex flex-col gap-6">
-        {verifiedADRs.map((entry) => (
-          <article class="p-6 sm:p-8 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/80 hover:border-indigo-500/30 transition-all duration-300">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
-              <div class="flex items-center gap-3">
-                <span class="font-mono text-xs font-semibold text-indigo-400">{entry.id}</span>
-                <span class="text-slate-600 text-xs">/</span>
-                <span class="font-mono text-xs text-slate-400 uppercase tracking-wider">{entry.type}</span>
-              </div>
-              <div class="flex items-center gap-4">
-                <span class="font-mono text-xs text-slate-500">{entry.date}</span>
-                <StatusBadge status={entry.status} size="sm" />
-              </div>
+    <!-- Publication Feed -->
+    <div class="flex flex-col gap-8 mb-20">
+      {journalEntries.map((entry) => (
+        <article class="p-8 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/80 hover:border-indigo-500/30 transition-all duration-300">
+          <!-- Metadata Bar -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
+            <div class="flex items-center gap-3 font-mono text-xs">
+              <span class="text-indigo-400 font-semibold">{entry.id}</span>
+              <span class="text-slate-600">/</span>
+              <span class="text-slate-300 uppercase tracking-wider">{entry.category}</span>
             </div>
+            <div class="flex items-center gap-4 font-mono text-xs">
+              <span class="text-slate-500">{entry.date}</span>
+              <StatusBadge status={entry.status} size="sm" />
+            </div>
+          </div>
 
-            <h2 class="text-xl sm:text-2xl font-semibold text-white mt-4 mb-2 tracking-tight">
+          <!-- Title & Tag -->
+          <div class="mt-4 mb-3">
+            <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
               {entry.title}
             </h2>
+            <span class="font-mono text-[11px] text-indigo-300/80 mt-1 block">
+              Reference Basis: {entry.tag}
+            </span>
+          </div>
 
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans max-w-4xl">
-              {entry.summary}
-            </p>
-          </article>
-        ))}
-      </div>
+          <!-- Summary Body -->
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans max-w-4xl mb-4">
+            {entry.summary}
+          </p>
+
+          <!-- Key Empirical Finding / Impact -->
+          <div class="p-4 rounded-xl border border-white/[0.05] bg-black/30 text-xs font-mono text-slate-400">
+            <span class="text-emerald-400 font-semibold">Empirical Finding / Decision Impact: </span>
+            <span class="text-slate-300">{entry.findings}</span>
+          </div>
+        </article>
+      ))}
     </div>
 
-    <!-- 2. Peer-Reviewed Papers Section (Honest State) -->
+    <!-- Publications Status Box -->
     <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#090b10] flex flex-col items-center text-center max-w-3xl mx-auto">
       <div class="w-10 h-10 rounded-full border border-white/10 bg-[#0e1117] flex items-center justify-center text-slate-400 mb-4">
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -106,26 +168,17 @@ const verifiedADRs = [
         </svg>
       </div>
 
-      <span class="font-mono text-xs uppercase tracking-widest text-indigo-400 mb-1">Publications Status</span>
-      <h3 class="text-lg font-semibold text-white mb-2">Formal Academic Publications: Pending Level 3 Gate</h3>
+      <span class="font-mono text-xs uppercase tracking-widest text-indigo-400 mb-1">Publications Policy</span>
+      <h3 class="text-lg font-semibold text-white mb-2">Formal Academic Manuscripts: Subject to Empirical Evidence</h3>
       <p class="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed font-sans">
-        Chakaso does not list unverified preprints or speculative research papers. Formal manuscripts will be released when empirical scaling laws and architectural comparisons reach reproducible conclusions.
+        Chakaso does not list speculative research papers or vanity preprints. Academic manuscripts will be submitted when comparative architectural sweeps and multi-seed scaling curves reach reproducible conclusions.
       </p>
 
-      <div class="mt-6">
-        <a
-          href="https://github.com/bhogesararam23/chakaso/tree/main/docs/decisions"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 hover:border-indigo-500/40 bg-[#0e1117] text-xs font-mono text-indigo-300 hover:text-white transition-all"
-        >
-          <span>Browse ADRs in Git Repository</span>
-          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        </a>
+      <div class="mt-6 flex items-center gap-4 text-xs font-mono text-slate-500">
+        <span>Verified against repository ledger</span>
+        <span>·</span>
+        <span>Zero fabricated publications</span>
       </div>
     </div>
-
   </div>
 </Layout>
