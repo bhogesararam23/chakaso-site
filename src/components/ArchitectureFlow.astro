@@ -54,9 +54,9 @@ const flowNodes: FlowNode[] = [
     category: 'Computation',
     status: 'Implemented',
     summary: 'Pre-LN stacked decoder blocks with causal masked self-attention.',
-    details: 'Six causal transformer layers with multi-head attention, RMSNorm stabilisation, SwiGLU non-linearities, and strict lower-triangular causal masks.',
-    module: 'chakaso.training.transformer',
-    specs: ['6 Transformer Layers', '4 Attention Heads', 'Pre-LN + RMSNorm', 'SwiGLU Feed-Forward']
+    details: 'Six causal transformer layers with multi-head attention, RMSNorm stabilisation, standard GELU feed-forward networks, and strict lower-triangular causal masks.',
+    module: 'chakaso.training.decoder',
+    specs: ['6 Transformer Layers', '4 Attention Heads', 'Pre-LN + RMSNorm', 'GELU Feed-Forward']
   },
   {
     id: 'projection',

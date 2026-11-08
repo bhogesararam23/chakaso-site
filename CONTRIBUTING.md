@@ -8,7 +8,7 @@ This document outlines the local development setup, code standards, research ver
 
 ## 1. Prerequisites
 
-- **Node.js:** `>= 20.18.0` (or `24.x`)
+- **Node.js:** `>= 22.23.4` (or `24.x`, matching `@astrojs/react` requirements)
 - **Package Manager:** `pnpm` (recommended), `npm`, or `bun`
 - **Git:** Git 2.30+
 

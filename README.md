@@ -35,7 +35,7 @@ The website serves as the primary editorial, educational, and publication interf
 
 ## Information Architecture & Sections
 
-The website is structured into six dedicated knowledge sections:
+The website is structured into eleven dedicated knowledge sections and sub-domains:
 
 | Section | Route | Focus |
 | :--- | :--- | :--- |

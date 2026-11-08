@@ -102,9 +102,10 @@ Attention queries, keys, and values are projected into $h=4$ attention heads ($d
 $$\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{Q K^T}{\\sqrt{d_k}} + M\\right) V$$
 where $M_{i,j} = 0$ for $j \\le i$ and $-\\infty$ for $j > i$.
 
-#### 4. SwiGLU Non-Linearity
-The feed-forward network uses a Swish Gated Linear Unit with hidden expansion $d_{\\text{ffn}} = 1,024$:
-$$\\text{SwiGLU}(x) = \\left(\\text{Swish}(x W_{\\text{gate}}) \\otimes x W_{\\text{up}}\\right) W_{\\text{down}}$$
+#### 4. GELU Feed-Forward Network
+The feed-forward network in Chakaso Base 0.1.0 uses a Gaussian Error Linear Unit (GELU) with expansion $d_{\text{ffn}} = 1,024$ ($4 \times d_{\text{model}}$), matching \`chakaso.training.decoder\`:
+$$\text{FFN}(x) = \text{GELU}(x W_{\text{up}}) W_{\text{down}}$$
+where $W_{\text{up}} \in \mathbb{R}^{d_{\text{model}} \times d_{\text{ffn}}}$ and $W_{\text{down}} \in \mathbb{R}^{d_{\text{ffn}} \times d_{\text{model}}}$. SwiGLU gating is documented in ADR-0037 as an exploratory candidate for future scaled checkpoints.
 `
   },
   {

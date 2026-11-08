@@ -24,8 +24,8 @@ const lifecycles = [
     step: 'Stage 03',
     title: 'Rotary Decoder Transformer Core',
     status: 'Implemented' as const,
-    summary: '6 causal decoder layers with Pre-LN RMSNorm, RoPE rotary positional bindings, 4 attention heads (d_k = 64), and SwiGLU gated linear units (d_ffn = 1,024).',
-    boundary: 'chakaso.training.transformer'
+    summary: '6 causal decoder layers with Pre-LN RMSNorm, RoPE rotary positional bindings, 4 attention heads (d_k = 64), and GELU feed-forward networks (d_ffn = 1,024).',
+    boundary: 'chakaso.training.decoder'
   },
   {
     step: 'Stage 04',
@@ -196,7 +196,7 @@ const servingSpecs = [
               <td class="py-3.5 pr-6 font-semibold text-white">FFN Hidden Width</td>
               <td class="py-3.5 pr-6 text-indigo-400">d_ffn</td>
               <td class="py-3.5 pr-6 text-slate-200">1,024</td>
-              <td class="py-3.5 text-slate-400">SwiGLU intermediate expansion ratio of 4×</td>
+              <td class="py-3.5 text-slate-400">GELU feed-forward intermediate expansion ratio of 4×</td>
             </tr>
           </tbody>
         </table>

@@ -21,7 +21,7 @@ export const RESEARCH_DOMAINS: ResearchDomainDetail[] = [
     status: 'Implemented',
     question: 'How do architectural primitives (causal decoders, rotary embeddings, normalization schemes) perform when trained from scratch under constrained token budgets?',
     whyItMatters: 'Most contemporary architectures are evaluated at billion-parameter scales on trillion-token corpora. Understanding how architectural inductive biases function in compact parameter regimes (1M–50M) isolates true mathematical efficiency from sheer data volume.',
-    implemented: 'Causal decoder-only transformer with Pre-LN RMSNorm, RoPE rotary positional embeddings, SwiGLU feed-forward networks, and strict lower-triangular causal attention masking.',
+    implemented: 'Causal decoder-only transformer with Pre-LN RMSNorm, RoPE rotary positional embeddings, GELU feed-forward networks (4× expansion), and strict lower-triangular causal attention masking.',
     measured: 'In E2608, a 3.41M rotary decoder reached 1.6865 bpc. In E2611, holding context and parameters identical (~1M), the rotary decoder beat standard transformer by 0.0966 bpc. Frontier mechanisms (GQA, MLA, MoE, sliding-window) showed no published evidence of benefit at 3.4M.',
     unknowns: 'Whether state-space or linear attention variants can maintain syntactic precision while scaling beyond 256 context positions.',
     nextEvidence: 'Extended training budget study (E2636) to establish whether validation loss turns over prior to increasing layer depth.',
