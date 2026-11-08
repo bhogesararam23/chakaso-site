@@ -84,14 +84,6 @@
   background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
 }
 
-.glow-subtle-violet {
-  box-shadow: 0 0 50px -10px rgba(129, 140, 248, 0.15);
-}
-
-.glow-subtle-blue {
-  box-shadow: 0 0 50px -10px rgba(56, 189, 248, 0.15);
-}
-
 /* Technical typography styles */
 .mono-label {
   font-family: var(--font-mono);

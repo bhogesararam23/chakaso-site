@@ -1,364 +1,135 @@
 ---
-// Spatial Intelligence Structure — Interactive Computational Geometry
+// Technical Model Specification & Architecture Schematic
+// Reflects the exact 3,413,760-parameter causal decoder implemented in chakaso.training.decoder
 ---
 
-<div class="relative w-full h-[450px] sm:h-[540px] lg:h-[640px] flex items-center justify-center overflow-hidden">
-  <!-- Subtle technical grid background -->
-  <div class="absolute inset-0 bg-grid-pattern opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)] pointer-events-none"></div>
-
-  <!-- Radial atmospheric ambient glow -->
-  <div class="absolute w-[400px] h-[400px] rounded-full bg-indigo-500/10 blur-[100px] pointer-events-none -translate-y-4"></div>
-  <div class="absolute w-[300px] h-[300px] rounded-full bg-violet-600/10 blur-[80px] pointer-events-none translate-x-12 translate-y-8"></div>
-
-  <!-- Interactive 3D Computational Lattice Canvas -->
-  <canvas
-    id="hero-spatial-canvas"
-    class="relative z-10 w-full h-full cursor-grab active:cursor-grabbing max-w-2xl mx-auto block"
-    aria-label="Interactive 3D representation of Chakaso's computational model structure"
-    role="img"
-  ></canvas>
-
-  <!-- Status / Technical Annotation Overlay -->
-  <div class="absolute bottom-4 left-6 right-6 flex items-center justify-between text-[11px] font-mono text-slate-500 pointer-events-none z-20">
-    <div class="flex items-center gap-2">
-      <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-      <span class="tracking-widest uppercase">LATTICE: 3.41M PARAMETER TOPOLOGY</span>
+<div class="w-full max-w-xl mx-auto">
+  <div class="rounded-2xl border border-white/[0.1] bg-[#0c0e12] p-6 sm:p-7 shadow-2xl relative">
+    
+    <!-- Header Block -->
+    <div class="flex items-start justify-between pb-4 border-b border-white/[0.08] mb-5">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-300 font-semibold">
+            Baseline Architecture Schematic
+          </span>
+        </div>
+        <div class="text-xs font-mono text-slate-400 mt-1">
+          chakaso-base@0.1.0 · Causal Decoder Transformer
+        </div>
+      </div>
+      <div class="text-right font-mono">
+        <span class="text-xs text-indigo-400 font-bold px-2.5 py-1 rounded bg-indigo-500/10 border border-indigo-500/20">
+          3,413,760 params
+        </span>
+      </div>
     </div>
-    <div class="hidden sm:flex items-center gap-4">
-      <span>D_MODEL: 256</span>
-      <span>N_LAYERS: 6</span>
-      <span>VOCAB: 4,096 BPE</span>
+
+    <!-- Tensor Dimensions Strip -->
+    <div class="grid grid-cols-4 gap-2 mb-5 font-mono text-center text-xs">
+      <div class="p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
+        <span class="text-[10px] text-slate-400 block">d_model</span>
+        <span class="font-semibold text-white">256</span>
+      </div>
+      <div class="p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
+        <span class="text-[10px] text-slate-400 block">n_layers</span>
+        <span class="font-semibold text-white">6</span>
+      </div>
+      <div class="p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
+        <span class="text-[10px] text-slate-400 block">heads (h)</span>
+        <span class="font-semibold text-white">4 × 64</span>
+      </div>
+      <div class="p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
+        <span class="text-[10px] text-slate-400 block">d_ffn</span>
+        <span class="font-semibold text-white">1,024</span>
+      </div>
     </div>
+
+    <!-- Computational Pipeline Stages -->
+    <div class="space-y-2.5 font-mono text-xs">
+      
+      <!-- Stage 1: Ingestion & Subword -->
+      <div class="p-3 rounded-xl border border-white/[0.06] bg-[#07080a] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-[11px] text-slate-400 w-5">01</span>
+          <div>
+            <div class="text-slate-200 font-medium">Space-Prefixed Subword BPE</div>
+            <div class="text-[11px] text-slate-400">4,096 vocabulary · byte-level fallback · ADR-0051</div>
+          </div>
+        </div>
+        <span class="text-[11px] text-slate-400">T ≤ 256</span>
+      </div>
+
+      <!-- Arrow down connector -->
+      <div class="flex justify-center text-slate-600 text-[10px] -my-1">↓</div>
+
+      <!-- Stage 2: Embedding & Positional Encoding -->
+      <div class="p-3 rounded-xl border border-white/[0.06] bg-[#07080a] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-[11px] text-slate-400 w-5">02</span>
+          <div>
+            <div class="text-slate-200 font-medium">Embedding & Rotary Encodings</div>
+            <div class="text-[11px] text-slate-400">Dense projection to ℝ²⁵⁶ + RoPE pairwise rotation</div>
+          </div>
+        </div>
+        <span class="text-[11px] text-indigo-400">RoPE</span>
+      </div>
+
+      <!-- Arrow down connector -->
+      <div class="flex justify-center text-slate-600 text-[10px] -my-1">↓</div>
+
+      <!-- Stage 3: Stacked Transformer Blocks (x6) -->
+      <div class="p-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/15">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-indigo-400 font-semibold w-5">03</span>
+            <span class="text-white font-semibold">6× Causal Decoder Blocks</span>
+          </div>
+          <span class="text-[10px] text-indigo-300 uppercase px-2 py-0.5 rounded bg-indigo-500/20">Repeated Stack</span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-indigo-500/20 text-[11px]">
+          <div class="p-2 rounded bg-black/40 border border-white/[0.04]">
+            <div class="text-slate-300 font-medium">Pre-LN Attention</div>
+            <div class="text-slate-400 text-[10px]">RMSNorm → Causal MHA</div>
+          </div>
+          <div class="p-2 rounded bg-black/40 border border-white/[0.04]">
+            <div class="text-slate-300 font-medium">Pre-LN Feed-Forward</div>
+            <div class="text-slate-400 text-[10px]">RMSNorm → GELU FFN (1,024)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow down connector -->
+      <div class="flex justify-center text-slate-600 text-[10px] -my-1">↓</div>
+
+      <!-- Stage 4: Logit Output -->
+      <div class="p-3 rounded-xl border border-white/[0.06] bg-[#07080a] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-[11px] text-slate-400 w-5">04</span>
+          <div>
+            <div class="text-slate-200 font-medium">Final RMSNorm & Output Logits</div>
+            <div class="text-[11px] text-slate-400">Projection to 4,096 logits · Bounded decoding (ADR-0038)</div>
+          </div>
+        </div>
+        <span class="text-[11px] text-emerald-400">P(x_t)</span>
+      </div>
+
+    </div>
+
+    <!-- Empirical Verification Footer -->
+    <div class="mt-5 pt-4 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-slate-400">
+      <div>
+        <span>Split: </span>
+        <span class="text-slate-300">Within-work (1.6865 bpc, ADR-0042)</span>
+      </div>
+      <div>
+        <a href="/architecture" class="text-indigo-400 hover:text-indigo-300 hover:underline">
+          View code contract →
+        </a>
+      </div>
+    </div>
+
   </div>
 </div>
-
-<script>
-  (function () {
-    const canvas = document.getElementById('hero-spatial-canvas') as HTMLCanvasElement | null;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
-    let animationFrameId: number;
-
-    // 3D rotation state
-    let rotX = 0.25;
-    let rotY = 0.4;
-    let targetRotX = 0.25;
-    let targetRotY = 0.4;
-
-    // Mouse tracking for parallax tilt
-    let mouseX = 0;
-    let mouseY = 0;
-    let isDragging = false;
-    let lastMouseX = 0;
-    let lastMouseY = 0;
-
-    // Lattice geometry: 3D vertices for an icosahedron / dimensional projection
-    interface Point3D {
-      x: number;
-      y: number;
-      z: number;
-      pulse: number;
-      origX: number;
-      origY: number;
-      origZ: number;
-    }
-
-    const phi = (1 + Math.sqrt(5)) / 2;
-    const baseVertices = [
-      [-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0],
-      [0, -1, phi], [0, 1, phi], [0, -1, -phi], [0, 1, -phi],
-      [phi, 0, -1], [phi, 0, 1], [-phi, 0, -1], [-phi, 0, 1]
-    ];
-
-    // Inner attention core vertices
-    const coreVertices = [
-      [0, 0, 0],
-      [-0.6, 0, 0], [0.6, 0, 0],
-      [0, -0.6, 0], [0, 0.6, 0],
-      [0, 0, -0.6], [0, 0, 0.6]
-    ];
-
-    const scaleFactor = 110;
-    const nodes: Point3D[] = [];
-
-    // Outer shell nodes
-    baseVertices.forEach(([x, y, z]) => {
-      const len = Math.hypot(x, y, z);
-      const nx = (x / len) * scaleFactor;
-      const ny = (y / len) * scaleFactor;
-      const nz = (z / len) * scaleFactor;
-      nodes.push({ x: nx, y: ny, z: nz, origX: nx, origY: ny, origZ: nz, pulse: Math.random() * Math.PI });
-    });
-
-    // Inner core nodes
-    coreVertices.forEach(([x, y, z]) => {
-      const nx = x * (scaleFactor * 0.55);
-      const ny = y * (scaleFactor * 0.55);
-      const nz = z * (scaleFactor * 0.55);
-      nodes.push({ x: nx, y: ny, z: nz, origX: nx, origY: ny, origZ: nz, pulse: Math.random() * Math.PI });
-    });
-
-    // Particle field
-    interface Particle {
-      x: number;
-      y: number;
-      z: number;
-      speed: number;
-    }
-    const particles: Particle[] = [];
-    for (let i = 0; i < 48; i++) {
-      const r = 160 + Math.random() * 80;
-      const theta = Math.random() * Math.PI * 2;
-      const phiAngle = Math.acos(2 * Math.random() - 1);
-      particles.push({
-        x: r * Math.sin(phiAngle) * Math.cos(theta),
-        y: r * Math.sin(phiAngle) * Math.sin(theta),
-        z: r * Math.cos(phiAngle),
-        speed: 0.002 + Math.random() * 0.004
-      });
-    }
-
-    function resize() {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = rect.width;
-      height = rect.height;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx?.scale(dpr, dpr);
-    }
-
-    const resizeObserver = new ResizeObserver(() => resize());
-    resizeObserver.observe(canvas);
-    resize();
-
-    // Mouse / Cursor listeners for interactive depth
-    window.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      mouseX = (e.clientX - cx) / (rect.width / 2);
-      mouseY = (e.clientY - cy) / (rect.height / 2);
-
-      // Subtle target orientation from mouse
-      targetRotY = 0.4 + mouseX * 0.35;
-      targetRotX = 0.25 + mouseY * 0.25;
-    }, { passive: true });
-
-    // Drag rotation
-    canvas.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
-    });
-
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (isDragging) {
-        const dx = e.clientX - lastMouseX;
-        const dy = e.clientY - lastMouseY;
-        targetRotY += dx * 0.008;
-        targetRotX += dy * 0.008;
-        lastMouseX = e.clientX;
-        lastMouseY = e.clientY;
-      }
-    });
-
-    // Touch support for drag
-    canvas.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        lastMouseX = e.touches[0].clientX;
-        lastMouseY = e.touches[0].clientY;
-      }
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => {
-      isDragging = false;
-    });
-
-    window.addEventListener('touchmove', (e) => {
-      if (isDragging && e.touches.length === 1) {
-        const dx = e.touches[0].clientX - lastMouseX;
-        const dy = e.touches[0].clientY - lastMouseY;
-        targetRotY += dx * 0.008;
-        targetRotX += dy * 0.008;
-        lastMouseX = e.touches[0].clientX;
-        lastMouseY = e.touches[0].clientY;
-      }
-    }, { passive: true });
-
-    // Render loop
-    let lastTime = performance.now();
-
-    function render(currentTime: number) {
-      const dt = (currentTime - lastTime) / 1000;
-      lastTime = currentTime;
-
-      // Smooth interpolation toward target rotation + gentle continuous idle drift
-      targetRotY += 0.15 * dt;
-      rotX += (targetRotX - rotX) * 0.06;
-      rotY += (targetRotY - rotY) * 0.06;
-
-      ctx.clearRect(0, 0, width, height);
-
-      const cx = width / 2;
-      const cy = height / 2;
-      const fov = 340;
-
-      // Trig cached
-      const cosY = Math.cos(rotY);
-      const sinY = Math.sin(rotY);
-      const cosX = Math.cos(rotX);
-      const sinX = Math.sin(rotX);
-
-      // Project function
-      function project(p: { x: number; y: number; z: number }) {
-        // Rotate around Y
-        const x1 = p.x * cosY + p.z * sinY;
-        const z1 = -p.x * sinY + p.z * cosY;
-        // Rotate around X
-        const y2 = p.y * cosX - z1 * sinX;
-        const z2 = p.y * sinX + z1 * cosX;
-
-        const distance = fov / (fov + z2);
-        return {
-          sx: cx + x1 * distance,
-          sy: cy + y2 * distance,
-          depth: z2,
-          scale: distance
-        };
-      }
-
-      // 1. Draw outer orbital rings
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = 'rgba(129, 140, 248, 0.08)';
-      ctx.beginPath();
-      const ringSteps = 48;
-      for (let i = 0; i <= ringSteps; i++) {
-        const angle = (i / ringSteps) * Math.PI * 2;
-        const px = Math.cos(angle) * (scaleFactor * 1.55);
-        const pz = Math.sin(angle) * (scaleFactor * 1.55);
-        const pt = project({ x: px, y: 0, z: pz });
-        if (i === 0) ctx.moveTo(pt.sx, pt.sy);
-        else ctx.lineTo(pt.sx, pt.sy);
-      }
-      ctx.stroke();
-
-      // 2. Draw background particles
-      particles.forEach((part) => {
-        // Rotate particle orbit slowly
-        const angle = part.speed;
-        const nx = part.x * Math.cos(angle) - part.z * Math.sin(angle);
-        const nz = part.x * Math.sin(angle) + part.z * Math.cos(angle);
-        part.x = nx;
-        part.z = nz;
-
-        const pt = project(part);
-        const alpha = Math.max(0.1, (pt.depth + 200) / 400 * 0.4);
-        ctx.fillStyle = `rgba(168, 85, 247, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(pt.sx, pt.sy, Math.max(0.8, 1.2 * pt.scale), 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      // 3. Project all nodes
-      const projectedNodes = nodes.map((n, idx) => {
-        n.pulse += dt * 2;
-        const breathe = 1 + Math.sin(n.pulse) * 0.03;
-        const pt = project({ x: n.origX * breathe, y: n.origY * breathe, z: n.origZ * breathe });
-        return { ...pt, idx, isCore: idx >= baseVertices.length };
-      });
-
-      // 4. Draw connecting edges
-      ctx.lineWidth = 1;
-      for (let i = 0; i < projectedNodes.length; i++) {
-        for (let j = i + 1; j < projectedNodes.length; j++) {
-          const n1 = nodes[i];
-          const n2 = nodes[j];
-          const dist3D = Math.hypot(n1.origX - n2.origX, n1.origY - n2.origY, n1.origZ - n2.origZ);
-
-          // Threshold for edge connection
-          if (dist3D < 125) {
-            const p1 = projectedNodes[i];
-            const p2 = projectedNodes[j];
-            const avgDepth = (p1.depth + p2.depth) / 2;
-            const depthAlpha = Math.max(0.04, Math.min(0.35, (avgDepth + 150) / 300 * 0.35));
-
-            ctx.strokeStyle = (i < baseVertices.length && j < baseVertices.length)
-              ? `rgba(129, 140, 248, ${depthAlpha})`
-              : `rgba(56, 189, 248, ${depthAlpha * 1.2})`;
-
-            ctx.beginPath();
-            ctx.moveTo(p1.sx, p1.sy);
-            ctx.lineTo(p2.sx, p2.sy);
-            ctx.stroke();
-
-            // Edge pulse packet
-            if (Math.sin(currentTime * 0.003 + i * 2) > 0.85) {
-              const t = (Math.sin(currentTime * 0.002 + j) + 1) / 2;
-              const px = p1.sx + (p2.sx - p1.sx) * t;
-              const py = p1.sy + (p2.sy - p1.sy) * t;
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-              ctx.beginPath();
-              ctx.arc(px, py, 1.2, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          }
-        }
-      }
-
-      // 5. Draw nodes (sorted by depth for proper z-sorting)
-      projectedNodes.sort((a, b) => a.depth - b.depth);
-
-      projectedNodes.forEach((p) => {
-        const radius = p.isCore ? 3 * p.scale : 2.2 * p.scale;
-        const alpha = Math.max(0.3, Math.min(1, (p.depth + 180) / 360));
-
-        // Node halo
-        const grad = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, radius * 3.5);
-        if (p.isCore) {
-          grad.addColorStop(0, `rgba(168, 85, 247, ${alpha * 0.8})`);
-          grad.addColorStop(1, 'rgba(168, 85, 247, 0)');
-        } else {
-          grad.addColorStop(0, `rgba(56, 189, 248, ${alpha * 0.6})`);
-          grad.addColorStop(1, 'rgba(56, 189, 248, 0)');
-        }
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(p.sx, p.sy, radius * 3.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Node center
-        ctx.fillStyle = p.isCore ? '#f5d0fe' : '#ffffff';
-        ctx.beginPath();
-        ctx.arc(p.sx, p.sy, Math.max(1, radius), 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      animationFrameId = requestAnimationFrame(render);
-    }
-
-    animationFrameId = requestAnimationFrame(render);
-
-    // Pause animation when tab or viewport is hidden to save battery
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        cancelAnimationFrame(animationFrameId);
-      } else {
-        lastTime = performance.now();
-        animationFrameId = requestAnimationFrame(render);
-      }
-    });
-  })();
-</script>
