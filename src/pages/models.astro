@@ -3,26 +3,78 @@ import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 
-const verifiedBaseline = {
-  name: 'chakaso-base (E2608 Decoder Arm)',
-  version: '0.1.0-dev',
-  releaseLevel: 'Level 2 (Reproducible Integration Gate Passed)',
-  usefulBehaviorStatus: 'Level 3 Withheld (Experimental Baseline)',
-  parameters: '3,412,480 (~3.41M)',
-  contextPositions: '256 tokens',
-  vocabEntries: '4,096 BPE Subwords (Deterministic Byte Fallback)',
-  heldOutMetric: '1.6865 bits per character (bpc)',
-  corpus: 'Gutenberg English Prose v2 (24 texts, 919 docs, 14,490,005 chars, fingerprint: e9fc2e92f59d88ea)',
-  repetitionRate: 'Mean bigram repetition: 0.5538 (Zero periodic runs of 3+)',
-  license: 'Apache-2.0'
-};
+const verifiedModels = [
+  {
+    name: 'Chakaso Base 0.1.0',
+    slug: 'chakaso-base-0-1-0',
+    version: '0.1.0',
+    family: 'Causal Rotary Decoder',
+    schema: 'chakaso-decoder-checkpoint/1',
+    releaseContract: 'chakaso-model-release/1',
+    releaseLevel: 'Level 2 (Reproducible Integration)',
+    usefulBehaviorStatus: 'Level 3 Withheld',
+    status: 'Experimental' as const,
+    parameters: '3,413,760 (~3.41M)',
+    d_model: 256,
+    layers: 6,
+    heads: 4,
+    d_ffn: 1024,
+    contextWindow: 256,
+    vocabSize: '4,096 BPE Subwords (Byte-level fallback)',
+    corpus: 'Gutenberg English Prose v2 (24 books, 919 documents, 14,490,005 characters, fingerprint: e9fc2e92f59d88ea)',
+    splitStrategy: 'Within-work split (chapter-level; ADR-0042)',
+    heldOutMetric: '1.6865 bpc',
+    unigramBaseline: '3.2263 bpc',
+    uniformBaseline: '5.5661 bpc',
+    bigramRepetition: '0.5538',
+    periodicRuns: '0 runs of 3+ tokens',
+    checksum: '9aebe601dc1f12c5025ad012b88a6d0c54c376e982b9c54526924a4dd7314089',
+    contractLimitations: [
+      'Model predicts the next subword of 19th-century and classical English prose better than prior baselines; it does NOT answer questions, follow instructions, or produce publishable text.',
+      'Generations suffer from greedy decoding repetition (mean bigram repetition 0.5538). Stochastic sampling creates syntactic collapse.',
+      'Evaluated on a within-work split: 100% of test characters were chapters from books represented in training. Cross-work generalization is lower (ADR-0042).',
+      'Archaic vocabulary distribution; modern technical and conversational terms degrade into byte-level sequences.',
+      'Checkpoints are reproducible from declared seed and manifest; binary weights are withheld from public Git to maintain repository health (ADR-0004).'
+    ]
+  },
+  {
+    name: 'Chakaso Matched Decoder 1M',
+    slug: 'chakaso-decoder-1m',
+    version: 'E2611 Arm',
+    family: 'Causal Rotary Decoder',
+    schema: 'chakaso-decoder-checkpoint/1',
+    releaseContract: 'Experimental Benchmark Arm',
+    releaseLevel: 'Internal Research Arm',
+    usefulBehaviorStatus: 'Withheld',
+    status: 'Completed' as const,
+    parameters: '1,037,056 (~1.04M)',
+    d_model: 128,
+    layers: 4,
+    heads: 4,
+    d_ffn: 512,
+    contextWindow: 256,
+    vocabSize: '4,096 BPE Subwords',
+    corpus: 'Gutenberg English Prose v2 (Matched token budget)',
+    splitStrategy: 'Within-work split (ADR-0042)',
+    heldOutMetric: '1.8077 bpc',
+    unigramBaseline: '3.2263 bpc',
+    uniformBaseline: '5.5661 bpc',
+    bigramRepetition: '0.6420',
+    periodicRuns: 'Occasional cycle loops',
+    checksum: 'Internal research checkpoint E2611',
+    contractLimitations: [
+      'Capacity- and context-matched control arm built to evaluate rotary decoder vs transformer architecture without hyperparameter confounds.',
+      'Confirmed 0.0966 bpc advantage for rotary decoders over standard transformers at 1M scale.'
+    ]
+  }
+];
 
-const releaseLevels = [
+const releaseGates = [
   {
     level: 'Level 1',
     name: 'Structural Artifact Gate',
     status: 'PASSED' as const,
-    desc: 'Model directory contains valid model.json, checkpoint tensors pass SHA-256 integrity, architecture hyper-parameters load cleanly into Python.'
+    desc: 'Model directory contains valid model.json, checkpoint tensors pass SHA-256 integrity, architecture hyperparameters load cleanly into Python.'
   },
   {
     level: 'Level 2',
@@ -37,117 +89,160 @@ const releaseLevels = [
     desc: 'Withheld by design. Current 3.41M parameter baseline does not produce coherent, usable text for general-purpose user tasks.'
   }
 ];
-
-const honestyChecklist = [
-  {
-    topic: 'Production Readiness',
-    claim: 'NOT Production Ready',
-    note: 'This is an experimental research prototype for inspecting language model dynamics, not a commercial deployment.'
-  },
-  {
-    topic: 'Assistant Capability',
-    claim: 'NOT an Instruction-Following Assistant',
-    note: 'The model has undergone pre-training only. It does not possess instruction-following or conversational reasoning capabilities.'
-  },
-  {
-    topic: 'Public Checkpoint Downloads',
-    claim: 'Weights Withheld from Public Git',
-    note: 'Under ADR-0004, heavy binary checkpoints stay out of Git. Releases are cited by immutable SHA-256 checksums and can be retrained on demand.'
-  },
-  {
-    topic: 'Data Provenance',
-    claim: '100% Verified Provenance',
-    note: 'Zero scraped web dumps of ambiguous origin. Datasets are strictly Apache-2.0 repository text or verified public-domain Gutenberg prose.'
-  }
-];
 ---
 
 <Layout
-  title="Experimental Models & Baselines — Chakaso"
-  description="Transparent specifications of the Chakaso experimental model baseline: 3.41M parameters, 1.6865 bpc held-out loss, and Level 2 release contract."
+  title="Model Catalog & Research Profiles — Chakaso"
+  description="Model research catalog: Chakaso Base 0.1.0 specifications, Level 2 release contract, exact within-work evaluation split (ADR-0042), and verified limitations."
   currentPath="/models"
 >
   <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
-    
     <!-- Hero / Header -->
     <div class="max-w-3xl mb-16">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Experimental Baseline</span>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Model Research Catalog</span>
       </div>
 
       <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
-        The 3.41M Research Baseline
+        Experimental Model Profiles
       </h1>
 
       <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
-        We report actual measurements from trained checkpoints. Chakaso’s baseline model represents a transparent baseline designed to test the limits of compact language representations.
+        We report actual measurements from trained checkpoints. Chakaso Base 0.1.0 is an experimental research artifact designed to measure the limits of compact language representations, not a deployed assistant.
       </p>
     </div>
 
-    <!-- 1. Verified Model Fact Sheet -->
-    <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/90 mb-20">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/[0.08] gap-4">
-        <div>
-          <span class="font-mono text-xs text-indigo-400 uppercase tracking-widest">Active Checkpoint</span>
-          <h2 class="text-2xl font-bold text-white mt-1 font-mono">{verifiedBaseline.name}</h2>
+    <!-- Active Flagship Profile: Chakaso Base 0.1.0 -->
+    {verifiedModels.map((model) => (
+      <div class="p-8 sm:p-10 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/90 mb-20">
+        <!-- Title & Badges -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/[0.08] gap-4">
+          <div>
+            <div class="flex items-center gap-3 font-mono text-xs text-indigo-400 mb-1">
+              <span>{model.family}</span>
+              <span>·</span>
+              <span>v{model.version}</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-white font-mono">{model.name}</h2>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="font-mono text-xs px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+              {model.releaseLevel}
+            </span>
+            <span class="font-mono text-xs px-2.5 py-1 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
+              {model.usefulBehaviorStatus}
+            </span>
+          </div>
         </div>
-        <div class="flex items-center gap-3">
-          <StatusBadge status="Experimenting" size="md" />
+
+        <!-- 4-Stat Primary Callout Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 py-8 border-b border-white/[0.08] font-mono text-center">
+          <div class="p-4 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+            <span class="text-[10px] text-slate-500 uppercase">Parameters</span>
+            <div class="text-2xl font-bold text-white mt-1">{model.parameters}</div>
+            <span class="text-[11px] text-slate-500 font-sans mt-0.5 block">6 layers, 4 heads</span>
+          </div>
+          <div class="p-4 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+            <span class="text-[10px] text-slate-500 uppercase">Held-Out bpc</span>
+            <div class="text-2xl font-bold text-indigo-300 mt-1">{model.heldOutMetric}</div>
+            <span class="text-[11px] text-slate-500 font-sans mt-0.5 block">Within-work split</span>
+          </div>
+          <div class="p-4 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+            <span class="text-[10px] text-slate-500 uppercase">Context Horizon</span>
+            <div class="text-2xl font-bold text-white mt-1">{model.contextWindow} tokens</div>
+            <span class="text-[11px] text-slate-500 font-sans mt-0.5 block">Rotary (RoPE)</span>
+          </div>
+          <div class="p-4 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+            <span class="text-[10px] text-slate-500 uppercase">Vocabulary</span>
+            <div class="text-2xl font-bold text-emerald-400 mt-1">4,096 BPE</div>
+            <span class="text-[11px] text-slate-500 font-sans mt-0.5 block">Total byte fallback</span>
+          </div>
+        </div>
+
+        <!-- Comprehensive Hyperparameters -->
+        <div class="py-6 border-b border-white/[0.08] grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-slate-500 block mb-2">Model Topology & Geometry:</span>
+            <ul class="space-y-1.5 text-slate-300">
+              <li class="flex justify-between border-b border-white/[0.03] pb-1">
+                <span class="text-slate-400">Hidden Dimension (d_model):</span>
+                <span>{model.d_model}</span>
+              </li>
+              <li class="flex justify-between border-b border-white/[0.03] pb-1">
+                <span class="text-slate-400">Transformer Layers (n_layers):</span>
+                <span>{model.layers}</span>
+              </li>
+              <li class="flex justify-between border-b border-white/[0.03] pb-1">
+                <span class="text-slate-400">Attention Heads:</span>
+                <span>{model.heads} (d_k = 64)</span>
+              </li>
+              <li class="flex justify-between border-b border-white/[0.03] pb-1">
+                <span class="text-slate-400">SwiGLU FFN Hidden:</span>
+                <span>{model.d_ffn} (4 × d_model)</span>
+              </li>
+              <li class="flex justify-between">
+                <span class="text-slate-400">Contract Checksum:</span>
+                <span class="text-slate-400 truncate max-w-[200px]">{model.checksum}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-slate-500 block mb-2">Evaluation & Split Audit:</span>
+            <ul class="space-y-1.5 text-slate-300">
+              <li class="flex justify-between border-b border-white/[0.03] pb-1">
+                <span class="text-slate-400">Training Corpus:</span>
+                <span class="truncate max-w-[220px]">Gutenberg Prose v2</span>
+              </li>
+              <li class="flex justify-between border-b border-white/[0.03] pb-1">
+                <span class="text-slate-400">Split Methodology:</span>
+                <span class="text-amber-400">{model.splitStrategy}</span>
+              </li>
+              <li class="flex justify-between border-b border-white/[0.03] pb-1">
+                <span class="text-slate-400">Unigram Baseline:</span>
+                <span>{model.unigramBaseline}</span>
+              </li>
+              <li class="flex justify-between border-b border-white/[0.03] pb-1">
+                <span class="text-slate-400">Uniform Floor:</span>
+                <span>{model.uniformBaseline}</span>
+              </li>
+              <li class="flex justify-between">
+                <span class="text-slate-400">Mean Bigram Repetition:</span>
+                <span class="text-amber-300">{model.bigramRepetition}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Five Non-Negotiable Contract Limitations -->
+        <div class="pt-6">
+          <span class="font-mono text-xs uppercase tracking-widest text-amber-400 block mb-3">
+            Mandatory Contract Limitations (MODEL_CARD.md):
+          </span>
+          <div class="p-5 rounded-xl border border-amber-500/20 bg-amber-950/15 space-y-2">
+            {model.contractLimitations.map((lim, lIdx) => (
+              <div class="text-xs text-slate-300 font-sans flex items-start gap-2">
+                <span class="text-amber-400 font-mono text-[10px] mt-0.5">[{lIdx + 1}]</span>
+                <span class="leading-relaxed">{lim}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+    ))}
 
-      <!-- Grid of Verified Metrics -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-8 border-b border-white/[0.08]">
-        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
-          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-500">Parameters</span>
-          <div class="text-2xl font-semibold text-white mt-1 font-mono">{verifiedBaseline.parameters}</div>
-          <span class="text-[11px] text-slate-500 font-sans mt-1 block">Full causal decoder stack</span>
-        </div>
-
-        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
-          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-500">Held-Out Loss</span>
-          <div class="text-2xl font-semibold text-indigo-400 mt-1 font-mono">{verifiedBaseline.heldOutMetric}</div>
-          <span class="text-[11px] text-slate-500 font-sans mt-1 block">Whole-work author split</span>
-        </div>
-
-        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
-          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-500">Context Length</span>
-          <div class="text-2xl font-semibold text-white mt-1 font-mono">{verifiedBaseline.contextPositions}</div>
-          <span class="text-[11px] text-slate-500 font-sans mt-1 block">Learned positional range</span>
-        </div>
-
-        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
-          <span class="font-mono text-[11px] uppercase tracking-wider text-slate-500">Vocabulary</span>
-          <div class="text-2xl font-semibold text-white mt-1 font-mono">4,096 BPE</div>
-          <span class="text-[11px] text-slate-500 font-sans mt-1 block">Byte fallback (zero [UNK])</span>
-        </div>
-      </div>
-
-      <!-- Corpus and Provenance Details -->
-      <div class="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono text-slate-400">
-        <div>
-          <span class="text-slate-500 uppercase tracking-wider block mb-1">Training Corpus Provenance:</span>
-          <p class="text-slate-300 leading-relaxed font-sans">{verifiedBaseline.corpus}</p>
-        </div>
-        <div>
-          <span class="text-slate-500 uppercase tracking-wider block mb-1">Repetition & Generation Quality:</span>
-          <p class="text-slate-300 leading-relaxed font-sans">{verifiedBaseline.repetitionRate}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. The Three-Level Release Gate (ADR-0039) -->
+    <!-- The Three-Level Release Gate (ADR-0039) -->
     <div class="mb-20">
       <SectionHeader
-        index="02"
+        index="GATEWAY"
         tag="GOVERNANCE"
         title="The Three-Level Model Release Gate"
         description="Every model trained by Chakaso is evaluated against a tripartite release contract (ADR-0039) before distribution or runtime claims are made."
       />
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {releaseLevels.map((lvl) => (
+        {releaseGates.map((lvl) => (
           <div class="p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between mb-4">
@@ -170,27 +265,15 @@ const honestyChecklist = [
       </div>
     </div>
 
-    <!-- 3. Explicit Limitations & Honesty Checklist -->
-    <div id="evaluation" class="mb-12">
-      <SectionHeader
-        index="03"
-        tag="INTEGRITY"
-        title="Explicit Limitations & Boundaries"
-        description="What this research baseline can and cannot do. We strictly reject inflated marketing claims."
-      />
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {honestyChecklist.map((c) => (
-          <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0b0d13]/70">
-            <span class="text-[10px] font-mono uppercase tracking-wider text-indigo-400">{c.topic}</span>
-            <h3 class="text-sm font-semibold text-white mt-1 mb-2 font-mono">{c.claim}</h3>
-            <p class="text-xs text-slate-400 leading-relaxed font-sans">
-              {c.note}
-            </p>
-          </div>
-        ))}
+    <!-- Verification Metadata Footer -->
+    <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0c0e12]/60 text-xs font-mono text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <span class="text-indigo-400 font-semibold">Model Card Source: </span>
+        <span>MODEL_CARD.md · Checkpoint digest 9aebe601dc1f12c5... · Verified 04 November 2026</span>
+      </div>
+      <div class="shrink-0 text-slate-500">
+        Weights Withheld (ADR-0004)
       </div>
     </div>
-
   </div>
 </Layout>

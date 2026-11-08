@@ -60,21 +60,21 @@ const statusMatrix = [
   {
     category: 'Core Model & Training',
     items: [
-      { name: 'Causal Decoder Transformer (3.41M params)', status: 'Implemented' as const, note: 'E2608 trained baseline on Gutenberg Prose v2' },
-      { name: 'Byte-Pair Subword Tokenizer (4,096 vocab)', status: 'Implemented' as const, note: 'Lossless byte fallback, pre-tokenizer isolation' },
-      { name: 'Deterministic Corpus Manifests & Fingerprints', status: 'Implemented' as const, note: 'SHA-256 pinned document snapshots' },
-      { name: 'State-Space / Recurrent Arm Exploration', status: 'Experimenting' as const, note: 'E2601/E2602 comparisons on character vocab' },
-      { name: 'Adaptive Context Window Scaling (> 256 tokens)', status: 'Planned' as const, note: 'Targeting extended context horizons' }
+      { name: 'Causal Decoder Transformer (3.41M params)', status: 'Implemented' as const, note: 'E2608 reference baseline on Gutenberg Prose v2 (within-work split, ADR-0042)' },
+      { name: 'Space-Prefixed Subword Tokenizer (4,096 vocab)', status: 'Implemented' as const, note: 'Adopted in ADR-0051; lossless byte fallback, zero [UNK]' },
+      { name: 'Deterministic Corpus Manifests & Fingerprints', status: 'Implemented' as const, note: 'SHA-256 pinned document snapshots (ADR-0047, ADR-0036)' },
+      { name: 'From-Scratch Character Baselines (E2601/E2602)', status: 'Implemented' as const, note: '5-seed replication proving convergence and overfitting inflection' },
+      { name: '3× Ceiling Extended Training Budget (E2636)', status: 'Planned' as const, note: 'Preregistered study at 7,200 updates / 58.98M tokens' }
     ]
   },
   {
     category: 'Inference & Application Boundary',
     items: [
-      { name: 'Standard Library HTTP Serving Adapter', status: 'Implemented' as const, note: 'SSE streaming, loopback, zero external dependencies' },
+      { name: 'Standard Library HTTP Serving Adapter', status: 'Implemented' as const, note: 'SSE streaming, loopback, zero external dependencies (ADR-0038)' },
       { name: 'Bounded Decoding Parameter Contract', status: 'Implemented' as const, note: 'Temperature, top-k, top-p, seed, stop sequences' },
       { name: 'Epistemic Grounding & Citation Validation', status: 'Experimenting' as const, note: 'BM25 / dense hybrid evidence matching' },
       { name: 'Autonomous Self-Correction Loop', status: 'Conceptual' as const, note: 'Research boundary identified in ADR-0033' },
-      { name: 'Public Weights & Level 3 Useful Behavior Gate', status: 'Conceptual' as const, note: 'Withheld until models produce reliable text' }
+      { name: 'Level 3 Useful Assistant Behavior Gate', status: 'Conceptual' as const, note: 'Formally withheld on measured evidence (ADR-0039)' }
     ]
   }
 ];
@@ -142,7 +142,7 @@ const statusMatrix = [
           </div>
           <div>
             <div class="text-slate-500 text-[10px] uppercase tracking-wider">Held-Out Metric</div>
-            <div class="text-indigo-300 text-base font-semibold mt-0.5">1.6865 bpc</div>
+            <div class="text-indigo-300 text-base font-semibold mt-0.5">1.6865 bpc <span class="text-[10px] font-normal text-slate-400 font-sans block sm:inline">(within-work, ADR-0042)</span></div>
           </div>
           <div>
             <div class="text-slate-500 text-[10px] uppercase tracking-wider">Release Gate</div>

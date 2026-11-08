@@ -1,13 +1,25 @@
 ---
 interface Props {
-  status: 'Implemented' | 'Experimenting' | 'Planned' | 'Conceptual';
+  status: 'Implemented' | 'Experimenting' | 'Planned' | 'Conceptual' | 'Completed' | 'Measured' | 'Preregistered' | string;
   size?: 'sm' | 'md';
 }
 
 const { status, size = 'sm' } = Astro.props;
 
-const statusConfig = {
+const statusConfig: Record<string, { bg: string; border: string; text: string; dot: string }> = {
   Implemented: {
+    bg: 'bg-emerald-500/10',
+    border: 'border-emerald-500/30',
+    text: 'text-emerald-400',
+    dot: 'bg-emerald-400'
+  },
+  Completed: {
+    bg: 'bg-emerald-500/10',
+    border: 'border-emerald-500/30',
+    text: 'text-emerald-400',
+    dot: 'bg-emerald-400'
+  },
+  Measured: {
     bg: 'bg-emerald-500/10',
     border: 'border-emerald-500/30',
     text: 'text-emerald-400',
@@ -25,6 +37,12 @@ const statusConfig = {
     text: 'text-sky-400',
     dot: 'bg-sky-400'
   },
+  Preregistered: {
+    bg: 'bg-sky-500/10',
+    border: 'border-sky-500/30',
+    text: 'text-sky-400',
+    dot: 'bg-sky-400'
+  },
   Conceptual: {
     bg: 'bg-purple-500/10',
     border: 'border-purple-500/30',
@@ -33,7 +51,7 @@ const statusConfig = {
   }
 };
 
-const current = statusConfig[status];
+const current = statusConfig[status] || statusConfig['Implemented'];
 const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs';
 ---
 
