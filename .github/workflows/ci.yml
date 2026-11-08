@@ -36,3 +36,6 @@ jobs:
 
       - name: Astro production build
         run: pnpm build
+
+      - name: Verify internal link integrity
+        run: node scripts/verify-links.cjs

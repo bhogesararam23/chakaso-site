@@ -69,3 +69,4 @@ xml += `</urlset>\n`;
 
 fs.writeFileSync(path.join(__dirname, '../public/sitemap.xml'), xml, 'utf8');
 console.log('Generated public/sitemap.xml with', coreRoutes.length + docSlugs.length + expIds.length, 'URLs.');
+

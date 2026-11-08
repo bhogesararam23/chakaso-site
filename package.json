@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node scripts/verify-content-invariants.cjs"
+    "test": "node scripts/verify-content-invariants.cjs && astro build && node scripts/verify-links.cjs"
   },
   "engines": {
     "node": ">=22.23.4"

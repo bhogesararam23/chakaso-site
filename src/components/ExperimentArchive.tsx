@@ -57,11 +57,10 @@ export default function ExperimentArchive() {
             <button
               key={domain}
               onClick={() => setSelectedDomain(domain)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
-                selectedDomain === domain
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${selectedDomain === domain
                   ? 'bg-indigo-600 text-white font-medium shadow-sm shadow-indigo-600/30'
                   : 'bg-white/[0.03] text-slate-400 hover:text-slate-200 hover:bg-white/[0.06] border border-white/[0.05]'
-              }`}
+                }`}
             >
               {domain}
             </button>
@@ -86,11 +85,10 @@ export default function ExperimentArchive() {
           return (
             <div
               key={exp.id}
-              className={`rounded-2xl border transition-all duration-300 ${
-                isExpanded
+              className={`rounded-2xl border transition-all duration-300 ${isExpanded
                   ? 'border-indigo-500/40 bg-[#0d1017]'
                   : 'border-white/[0.08] bg-[#0c0e12]/70 hover:border-white/20 hover:bg-[#0f121a]'
-              }`}
+                }`}
             >
               {/* Card Header Row as Semantic Button */}
               <button
@@ -120,11 +118,10 @@ export default function ExperimentArchive() {
 
                 <div className="flex items-center gap-3 shrink-0 self-end md:self-center">
                   <span
-                    className={`font-mono text-[10px] px-2.5 py-0.5 rounded border uppercase tracking-wider ${
-                      exp.status === 'Completed' || exp.status === 'Measured'
+                    className={`font-mono text-[10px] px-2.5 py-0.5 rounded border uppercase tracking-wider ${exp.status === 'Completed' || exp.status === 'Measured'
                         ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10'
                         : 'border-sky-500/30 text-sky-400 bg-sky-500/10'
-                    }`}
+                      }`}
                   >
                     {exp.status}
                   </span>
