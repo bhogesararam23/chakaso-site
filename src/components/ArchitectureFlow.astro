@@ -1,0 +1,128 @@
+---
+import StatusBadge from './StatusBadge.astro';
+
+interface FlowNode {
+  id: string;
+  step: string;
+  name: string;
+  category: string;
+  status: 'Implemented' | 'Experimenting' | 'Planned' | 'Conceptual';
+  summary: string;
+  details: string;
+  module: string;
+  specs: string[];
+}
+
+const flowNodes: FlowNode[] = [
+  {
+    id: 'input',
+    step: '01',
+    name: 'Input Stream',
+    category: 'Ingestion',
+    status: 'Implemented',
+    summary: 'Raw UTF-8 byte stream with lossless fallback and whitespace fidelity.',
+    details: 'Streams characters directly without ad-hoc sanitisation that destroys structural formatting. Byte fallback guarantees zero unencodable inputs.',
+    module: 'chakaso.training.manifest',
+    specs: ['UTF-8 Encoding', 'Deterministic Normalisation', 'Lossless Byte Fallback']
+  },
+  {
+    id: 'tokenization',
+    step: '02',
+    name: 'Subword Tokenizer',
+    category: 'Representation',
+    status: 'Implemented',
+    summary: 'Byte-pair encoding with boundary-isolated pre-tokenization.',
+    details: 'Merges never cross word boundaries. Uses deterministic tie-breaking and checksum-verified vocabulary loaded directly from the release contract.',
+    module: 'chakaso.training.subword',
+    specs: ['4,096 Vocabulary Entries', 'Boundary-Preserving', 'SHA-256 Checksummed']
+  },
+  {
+    id: 'embedding',
+    step: '03',
+    name: 'Embedding & Positional',
+    category: 'Latent Space',
+    status: 'Implemented',
+    summary: 'Dense vector projection mapped into 256-dimensional latent space.',
+    details: 'Maps discrete subword indices into continuous representation vectors. Bound with positional embeddings across 256 sequence context positions.',
+    module: 'chakaso.training.transformer',
+    specs: ['d_model = 256', 'Context = 256 tokens', 'Learned & RoPE Positional']
+  },
+  {
+    id: 'computation',
+    step: '04',
+    name: 'Causal Transformer Core',
+    category: 'Computation',
+    status: 'Implemented',
+    summary: 'Pre-LN stacked decoder blocks with causal masked self-attention.',
+    details: 'Six causal transformer layers with multi-head attention, RMSNorm stabilisation, SwiGLU non-linearities, and strict lower-triangular causal masks.',
+    module: 'chakaso.training.transformer',
+    specs: ['6 Transformer Layers', '4 Attention Heads', 'Pre-LN + RMSNorm', 'SwiGLU Feed-Forward']
+  },
+  {
+    id: 'projection',
+    step: '05',
+    name: 'Output Projection',
+    category: 'Generation',
+    status: 'Implemented',
+    summary: 'Logit projection over 4,096 vocab entries with bounded decoding.',
+    details: 'Linear projection back to vocabulary distribution. Bounded decoding engine with validated temperature, top-k, top-p, seed control, and stop sequences.',
+    module: 'chakaso.models.runtime',
+    specs: ['Vocab Logits (4,096)', 'Bounded Top-k/Top-p', 'SSE Streaming', 'Exact Seed Reproduction']
+  },
+  {
+    id: 'grounding',
+    step: '06',
+    name: 'Epistemic Grounding',
+    category: 'Application Layer',
+    status: 'Experimenting',
+    summary: 'Citation validation, evidence identity, and structural verification boundary.',
+    details: 'An application layer that checks generated text against evidence documents using BM25 and hybrid scoring. Reassesses claims and records append-only answers.',
+    module: 'chakaso.evidence',
+    specs: ['Citation Verification', 'Evidence Boundary Checks', 'Append-Only Answer Store']
+  }
+];
+---
+
+<div class="relative w-full my-8">
+  <!-- Interactive Flow Track -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {flowNodes.map((node) => (
+      <div 
+        class="architecture-card relative group p-5 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 hover:bg-[#12151b] transition-all duration-300 hover:border-indigo-500/30 flex flex-col justify-between"
+        data-cursor-label="Inspect"
+      >
+        <!-- Top Metadata & Status -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-mono text-xs text-indigo-400 font-semibold tracking-wider">STAGE {node.step}</span>
+            <StatusBadge status={node.status} size="sm" />
+          </div>
+          <h3 class="text-base font-semibold text-slate-100 group-hover:text-white transition-colors flex items-center gap-2">
+            <span>{node.name}</span>
+          </h3>
+          <p class="font-mono text-[11px] text-slate-500 mt-0.5">{node.category}</p>
+          <p class="text-xs text-slate-400 mt-3 leading-relaxed">
+            {node.summary}
+          </p>
+        </div>
+
+        <!-- Specifications & Code Hook -->
+        <div class="mt-5 pt-4 border-t border-white/[0.06] flex flex-col gap-2">
+          <div class="flex flex-wrap gap-1.5">
+            {node.specs.map((spec) => (
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-slate-300 border border-white/[0.05]">
+                {spec}
+              </span>
+            ))}
+          </div>
+          <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-1">
+            <span class="truncate">{node.module}</span>
+          </div>
+        </div>
+
+        <!-- Subtle edge indicator -->
+        <div class="absolute -inset-[1px] rounded-xl border border-transparent group-hover:border-indigo-500/20 pointer-events-none transition-colors"></div>
+      </div>
+    ))}
+  </div>
+</div>

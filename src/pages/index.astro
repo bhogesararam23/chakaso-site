@@ -1,0 +1,384 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroVisual from '../components/HeroVisual.astro';
+import ArchitectureFlow from '../components/ArchitectureFlow.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+
+const researchAreas = [
+  {
+    number: '01',
+    title: 'Model Architectures',
+    tagline: 'Causal Decoders & State Spaces',
+    description: 'Investigating causal Pre-LN transformer baselines, state-space formulations, and hybrid recurrence architectures trained from random initialization.',
+    link: '/architecture',
+    status: 'Implemented' as const
+  },
+  {
+    number: '02',
+    title: 'Representation & Tokenization',
+    tagline: 'Deterministic Subword Vocabularies',
+    description: 'Boundary-preserving Byte-Pair Encoding with strict word isolation, lossless byte-level fallback, and checksummed self-describing vocabulary contracts.',
+    link: '/research#representation',
+    status: 'Implemented' as const
+  },
+  {
+    number: '03',
+    title: 'Learning & Optimization',
+    tagline: 'Objective Geometries & Convergence',
+    description: 'Exploring loss surfaces, cross-entropy scaling laws, learning-rate schedules, and optimization stability without massive compute waste.',
+    link: '/research#learning',
+    status: 'Experimenting' as const
+  },
+  {
+    number: '04',
+    title: 'Computational Systems',
+    tagline: 'Deterministic Pipelines & Standalone Serving',
+    description: 'Standard-library HTTP inference adapters, zero-dependency execution engines, CPU-verifiable test matrices, and strict contract verification.',
+    link: '/architecture#serving',
+    status: 'Implemented' as const
+  },
+  {
+    number: '05',
+    title: 'Evaluation & Reproducibility',
+    tagline: 'Whole-Work Splits & Holm–Bonferroni Correction',
+    description: 'Held-out bits-per-character accounting, author-level corpus isolation, non-parametric statistical testing, and reproducible seeds.',
+    link: '/models#evaluation',
+    status: 'Implemented' as const
+  },
+  {
+    number: '06',
+    title: 'Efficient Intelligence',
+    tagline: 'Parameter Density & Epistemic Boundaries',
+    description: 'Maximising representational capability per parameter, verifiable grounding checks, and precise limitations disclosure.',
+    link: '/research#efficiency',
+    status: 'Planned' as const
+  }
+];
+
+const statusMatrix = [
+  {
+    category: 'Core Model & Training',
+    items: [
+      { name: 'Causal Decoder Transformer (3.41M params)', status: 'Implemented' as const, note: 'E2608 trained baseline on Gutenberg Prose v2' },
+      { name: 'Byte-Pair Subword Tokenizer (4,096 vocab)', status: 'Implemented' as const, note: 'Lossless byte fallback, pre-tokenizer isolation' },
+      { name: 'Deterministic Corpus Manifests & Fingerprints', status: 'Implemented' as const, note: 'SHA-256 pinned document snapshots' },
+      { name: 'State-Space / Recurrent Arm Exploration', status: 'Experimenting' as const, note: 'E2601/E2602 comparisons on character vocab' },
+      { name: 'Adaptive Context Window Scaling (> 256 tokens)', status: 'Planned' as const, note: 'Targeting extended context horizons' }
+    ]
+  },
+  {
+    category: 'Inference & Application Boundary',
+    items: [
+      { name: 'Standard Library HTTP Serving Adapter', status: 'Implemented' as const, note: 'SSE streaming, loopback, zero external dependencies' },
+      { name: 'Bounded Decoding Parameter Contract', status: 'Implemented' as const, note: 'Temperature, top-k, top-p, seed, stop sequences' },
+      { name: 'Epistemic Grounding & Citation Validation', status: 'Experimenting' as const, note: 'BM25 / dense hybrid evidence matching' },
+      { name: 'Autonomous Self-Correction Loop', status: 'Conceptual' as const, note: 'Research boundary identified in ADR-0033' },
+      { name: 'Public Weights & Level 3 Useful Behavior Gate', status: 'Conceptual' as const, note: 'Withheld until models produce reliable text' }
+    ]
+  }
+];
+---
+
+<Layout
+  title="Chakaso — Intelligence, engineered from first principles"
+  description="An independent exploration of language models, computational systems, and the foundations of machine intelligence."
+  currentPath="/"
+>
+  <!-- 1. HERO SECTION -->
+  <section class="relative min-h-[85vh] flex flex-col justify-center px-6 md:px-12 pt-12 pb-20 overflow-hidden">
+    <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      
+      <!-- Hero Left: Typography & CTAs (Cols 1-7) -->
+      <div class="lg:col-span-7 flex flex-col items-start z-10">
+        
+        <!-- Status indicator tag -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117]/80 mb-8 backdrop-blur-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+          <span class="font-mono text-xs uppercase tracking-wider text-slate-300">Independent AI Research Initiative</span>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.05] editorial-title">
+          Intelligence,<br />
+          engineered from<br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-violet-200 to-sky-300">
+            first principles.
+          </span>
+        </h1>
+
+        <!-- Supporting Statement -->
+        <p class="mt-6 text-base sm:text-lg text-slate-400 max-w-xl leading-relaxed font-sans font-normal">
+          An independent exploration of language models, computational systems, and the foundations of machine intelligence.
+        </p>
+
+        <!-- CTAs -->
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <a
+            href="/research"
+            class="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-mono uppercase tracking-wider transition-all duration-200 shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 hover:scale-[1.02] flex items-center gap-2"
+            data-cursor-label="Explore"
+          >
+            <span>Explore the research</span>
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+
+          <a
+            href="/architecture"
+            class="px-6 py-3 rounded-lg border border-white/10 bg-[#0e1117] hover:bg-[#141822] hover:border-white/20 text-slate-200 text-xs font-mono uppercase tracking-wider transition-all duration-200"
+            data-cursor-label="View"
+          >
+            Discover the architecture
+          </a>
+        </div>
+
+        <!-- Provisional Model Metric Badge -->
+        <div class="mt-12 pt-8 border-t border-white/[0.08] w-full grid grid-cols-3 gap-6 font-mono">
+          <div>
+            <div class="text-slate-500 text-[10px] uppercase tracking-wider">Parameters</div>
+            <div class="text-slate-100 text-base font-semibold mt-0.5">3.41M</div>
+          </div>
+          <div>
+            <div class="text-slate-500 text-[10px] uppercase tracking-wider">Held-Out Metric</div>
+            <div class="text-indigo-300 text-base font-semibold mt-0.5">1.6865 bpc</div>
+          </div>
+          <div>
+            <div class="text-slate-500 text-[10px] uppercase tracking-wider">Release Gate</div>
+            <div class="text-slate-100 text-base font-semibold mt-0.5">Level 2</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Hero Right: Interactive Computational Lattice (Cols 8-12) -->
+      <div class="lg:col-span-5 relative w-full flex items-center justify-center">
+        <HeroVisual />
+      </div>
+
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-slate-500 opacity-60 hover:opacity-100 transition-opacity">
+      <span class="font-mono text-[10px] uppercase tracking-widest">Scroll</span>
+      <div class="w-[1px] h-8 bg-gradient-to-b from-indigo-400 to-transparent animate-pulse"></div>
+    </div>
+  </section>
+
+
+  <!-- 2. RESEARCH PHILOSOPHY -->
+  <section class="relative py-24 px-6 md:px-12 border-t border-white/[0.06] bg-[#07080a]">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        
+        <!-- Left Editorial Quote (Cols 1-6) -->
+        <div class="lg:col-span-6">
+          <span class="font-mono text-xs text-indigo-400 uppercase tracking-widest block mb-4">Research Philosophy</span>
+          <h2 class="text-3xl sm:text-5xl font-semibold text-white tracking-tight leading-[1.1] editorial-title">
+            Understanding intelligence means understanding what builds it.
+          </h2>
+          <div class="w-16 h-[2px] bg-indigo-500/40 my-8"></div>
+          <p class="text-sm text-slate-400 font-mono">
+            &mdash; The Chakaso Principles of Independent Investigation
+          </p>
+        </div>
+
+        <!-- Right Asymmetrical Tenets (Cols 7-12) -->
+        <div class="lg:col-span-6 flex flex-col gap-8 text-slate-300 text-sm sm:text-base leading-relaxed">
+          <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0c0e12]/60">
+            <h3 class="text-white font-medium text-base mb-2 font-mono flex items-center gap-2">
+              <span class="text-indigo-400 text-xs">01</span>
+              <span>Grounded Verification over Plausibility</span>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm">
+              We train model weights from random initialization on data whose provenance is verified. We document what the trained weights measurably do &mdash; and explicitly disclose what they cannot.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0c0e12]/60">
+            <h3 class="text-white font-medium text-base mb-2 font-mono flex items-center gap-2">
+              <span class="text-indigo-400 text-xs">02</span>
+              <span>Statistically Defensible Claims</span>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm">
+              Held-out loss calculations must withstand author-level whole-work corpus splitting and Holm–Bonferroni step corrections. We refuse to claim general reasoning capability from narrow loss improvements.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0c0e12]/60">
+            <h3 class="text-white font-medium text-base mb-2 font-mono flex items-center gap-2">
+              <span class="text-indigo-400 text-xs">03</span>
+              <span>Reproducible Engineering Contract</span>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm">
+              Checkpoints are tied to deterministic seeds, immutable corpus digests, and strict typing. A release is a verified contract that rejects untrusted weights at runtime.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 3. RESEARCH AREAS (01 to 06) -->
+  <section class="relative py-24 px-6 md:px-12 border-t border-white/[0.06] bg-[#090b0f]">
+    <div class="max-w-7xl mx-auto">
+      
+      <SectionHeader
+        index="PROGRAM"
+        tag="DOMAINS"
+        title="Research Domains"
+        description="Six foundational disciplines guiding our architecture design, training pipelines, and empirical verification."
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {researchAreas.map((area) => (
+          <a
+            href={area.link}
+            class="research-item group relative p-6 rounded-xl border border-white/[0.07] bg-[#0d1015]/70 hover:bg-[#12161f] transition-all duration-300 hover:border-indigo-500/40 flex flex-col justify-between"
+            data-cursor-label="Read"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-sm text-indigo-400 font-semibold">{area.number}</span>
+                <StatusBadge status={area.status} size="sm" />
+              </div>
+              <h3 class="text-lg font-semibold text-white group-hover:text-indigo-200 transition-colors">
+                {area.title}
+              </h3>
+              <div class="font-mono text-xs text-slate-500 mt-0.5">{area.tagline}</div>
+              <p class="mt-4 text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
+                {area.description}
+              </p>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-white/[0.05] flex items-center justify-between text-xs font-mono text-slate-400 group-hover:text-indigo-300 transition-colors">
+              <span>Explore domain</span>
+              <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </a>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- 4. ARCHITECTURE PREVIEW -->
+  <section class="relative py-24 px-6 md:px-12 border-t border-white/[0.06] bg-[#07080a]">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <span class="font-mono text-xs text-indigo-400 uppercase tracking-widest block mb-2">System Blueprint</span>
+          <h2 class="text-3xl sm:text-4xl font-semibold text-white tracking-tight editorial-title">
+            Computational Flow & Pipeline
+          </h2>
+          <p class="mt-2 text-sm text-slate-400 max-w-xl">
+            From raw input bytes to bounded token generation: every layer is deterministically validated and verified in Python.
+          </p>
+        </div>
+        <div>
+          <a
+            href="/architecture"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 hover:border-indigo-500/40 bg-[#0e1117] text-xs font-mono text-indigo-300 hover:text-white transition-all"
+          >
+            <span>Full Architecture Specifications</span>
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Flow Component -->
+      <ArchitectureFlow />
+
+    </div>
+  </section>
+
+
+  <!-- 5. CURRENT RESEARCH STATUS MATRIX -->
+  <section class="relative py-24 px-6 md:px-12 border-t border-white/[0.06] bg-[#090b0f]">
+    <div class="max-w-7xl mx-auto">
+      
+      <SectionHeader
+        index="HONESTY"
+        tag="STATE MATRIX"
+        title="Current Research Status"
+        description="We differentiate what is running in code from what is experimental, planned, or purely conceptual. No fabricated benchmarks or illusory milestones."
+      />
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {statusMatrix.map((section) => (
+          <div class="p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80">
+            <h3 class="text-sm font-mono uppercase tracking-wider text-slate-200 mb-6 pb-3 border-b border-white/[0.08] flex items-center justify-between">
+              <span>{section.category}</span>
+              <span class="text-slate-500 text-xs">STATUS AUDIT</span>
+            </h3>
+
+            <div class="flex flex-col gap-4">
+              {section.items.map((item) => (
+                <div class="p-3.5 rounded-lg border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.03] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <div class="text-sm font-medium text-slate-100">{item.name}</div>
+                    <div class="text-xs text-slate-400 font-mono mt-0.5">{item.note}</div>
+                  </div>
+                  <div class="shrink-0">
+                    <StatusBadge status={item.status} size="sm" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- 6. CLOSING CALLOUT -->
+  <section class="relative py-32 px-6 md:px-12 border-t border-white/[0.06] bg-[#060709] overflow-hidden text-center">
+    <div class="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none"></div>
+
+    <div class="relative max-w-3xl mx-auto flex flex-col items-center">
+      <span class="font-mono text-xs uppercase tracking-widest text-indigo-400 mb-4">First Principles</span>
+      
+      <h2 class="text-3xl sm:text-5xl font-bold tracking-tight text-white editorial-title">
+        The foundations are only the beginning.
+      </h2>
+
+      <p class="mt-6 text-sm sm:text-base text-slate-400 leading-relaxed font-sans max-w-xl">
+        Follow the research as Chakaso continues to evolve. All training manifests, model architecture code, and experimental results are tracked publicly.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/research"
+          class="px-6 py-3 rounded-lg bg-white text-slate-950 font-mono text-xs uppercase tracking-wider font-semibold hover:bg-slate-200 transition-all hover:scale-105"
+        >
+          Read Research Overview
+        </a>
+
+        <a
+          href="https://github.com/bhogesararam23/chakaso"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-6 py-3 rounded-lg border border-white/15 bg-[#0e1117] hover:bg-[#141822] text-slate-200 font-mono text-xs uppercase tracking-wider transition-all flex items-center gap-2"
+        >
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>Star on GitHub</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+</Layout>
