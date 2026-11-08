@@ -2,116 +2,64 @@
 import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import StatusBadge from '../components/StatusBadge.astro';
+import { RESEARCH_DOMAINS } from '../data/researchDomains';
 
-const domains = [
+const majorFindings = [
   {
-    id: 'architectures',
     num: '01',
-    title: 'Model Architectures & Topology',
-    status: 'Implemented' as const,
-    summary: 'Evaluating foundational computational blocks: Causal Transformers, State Spaces, and Recurrent Arms.',
-    content: `
-      Chakaso investigates how different foundational operators shape representation capacity, inductive biases, and sequence processing speed. Rather than adopting standard recipes blindly, we train architectures from random initialization to observe convergence behaviors directly.
-      
-      Our primary experimental baseline is a causal decoder-only transformer with Pre-LN stabilization and RMSNorm. In parallel, through experiments E2601 and E2602, we measured recurrent/state-space variants on standardized character-level corpora to measure parameter efficiency and long-range coherence bounds.
-    `,
-    metrics: [
-      { label: 'Baseline Topology', val: 'Causal Decoder Transformer' },
-      { label: 'Layer Normalization', val: 'Pre-LN / RMSNorm' },
-      { label: 'Positional Scheme', val: 'Learned & RoPE' }
-    ]
+    finding: 'A 3.41M rotary decoder trained from scratch reaches 1.6865 bpc held-out loss, comfortably beating unigram (3.23) and uniform (5.57) floors.',
+    evidenceClass: 'Experimental',
+    basis: 'E2608 · ADR-0037',
+    caveat: 'Within-work split (ADR-0042): 100% of test characters were chapters from books represented in training. Absolute cross-work generalization is lower.'
   },
   {
-    id: 'representation',
     num: '02',
-    title: 'Representation, Encodings & Tokenization',
-    status: 'Implemented' as const,
-    summary: 'Deterministic subword vocabularies with lossless byte fallbacks and word-boundary isolation.',
-    content: `
-      Tokenization is the foundational translation layer between human language and vector mathematics. A deficient tokenizer introduces permanent representational artifacts that no amount of transformer compute can overcome.
-      
-      Chakaso implemented a Byte-Pair Encoding (BPE) subword tokenizer (4,096 tokens) equipped with a deterministic pre-tokenizer that forbids merges across word boundaries. Furthermore, its byte-level base ensures total encoding coverage with zero unknown tokens ([UNK]), deterministic tie-breaking, and self-describing checksum validation on load.
-    `,
-    metrics: [
-      { label: 'Vocabulary Size', val: '4,096 BPE Subwords' },
-      { label: 'Base Coverage', val: 'Total (Byte-Level Fallback)' },
-      { label: 'Integrity Verification', val: 'SHA-256 Contract Checksum' }
-    ]
+    finding: 'At matched parameters (~1M) and context (256), the causal rotary decoder beats the standard transformer by 0.0966 bpc.',
+    evidenceClass: 'Experimental',
+    basis: 'E2611 · ADR-0040',
+    caveat: '44% of E2608 raw advantage survives when capacity is matched; single-seed draw clearing prose noise floor.'
   },
   {
-    id: 'learning',
     num: '03',
-    title: 'Learning Dynamics & Optimization',
-    status: 'Experimenting' as const,
-    summary: 'Measuring loss surface geometry, gradient propagation, and learning-rate schedules.',
-    content: `
-      Training language models without catastrophic divergence requires rigorous gradient tracking and stabilization. We analyze warmup schedules, cosine decay profiles, and weight decay sensitivities under strict compute constraints.
-      
-      Through experiments E2605 to E2608, we monitored step-wise validation loss, cross-entropy distributions, and gradient norms across multiple epochs, establishing empirical learning curves that confirm sustained optimization progress without overfitting small corpora.
-    `,
-    metrics: [
-      { label: 'Optimizer', val: 'AdamW with Decoupled Weight Decay' },
-      { label: 'Scheduler', val: 'Cosine Decay with Linear Warmup' },
-      { label: 'Precision', val: 'Float32 / Mixed Precision' }
-    ]
+    finding: 'Greedy decoding repetition (bigram repetition 0.5538) is the mathematical consequence of greedy decoding on a 3.4M entropy distribution, not a pipeline bug.',
+    evidenceClass: 'Measured here',
+    basis: 'E2610 · ADR-0039',
+    caveat: 'Stochastic sampling introduces diversity at the cost of immediate syntactic collapse. No decoding setting writes coherent text.'
   },
   {
-    id: 'systems',
     num: '04',
-    title: 'Computational Systems & Infrastructure',
-    status: 'Implemented' as const,
-    summary: 'Zero-dependency Python runtimes, standard-library HTTP serving, and offline CPU verification.',
-    content: `
-      Machine intelligence systems should not be brittle monoliths dependent on thousands of transitive third-party packages. Chakaso prioritizes local-first, verifiable system design.
-      
-      Under ADR-0038, we implemented an HTTP serving adapter utilizing only Python\'s standard library. It provides loopback streaming SSE (/v1/chat/completions) with bounded concurrency and automatic client-disconnect cancellation. Our CI matrix validates the entire codebase across three strict tiers on CPU, guaranteeing complete offline reproducibility.
-    `,
-    metrics: [
-      { label: 'Serving Runtime', val: 'Python Standard Library (Zero-Dep)' },
-      { label: 'CI Verification', val: '3 Tiers (Core, Train, Model Path)' },
-      { label: 'Concurrency', val: 'Bounded Loopback Server' }
-    ]
+    finding: 'Training on a 5-register technical mixture lowers technical held-out loss by 0.2758 bpc while increasing prose loss by 0.0303 bpc.',
+    evidenceClass: 'Experimental',
+    basis: 'E2612 · ADR-0041',
+    caveat: 'E2613 proved this prose penalty is caused by spending token positions on technical text rather than data corruption.'
   },
   {
-    id: 'evaluation',
     num: '05',
-    title: 'Evaluation Methodology & Statistical Rigor',
-    status: 'Implemented' as const,
-    summary: 'Held-out bits-per-character metrics, whole-work author splits, and Holm–Bonferroni corrections.',
-    content: `
-      Benchmark gamification is the primary affliction of modern AI claims. Chakaso adopts a strict empirical standard: held-out bits per character (bpc) evaluated over whole-work splits where validation documents share zero overlap with training data.
-      
-      When evaluating comparative model arms, we mandate non-parametric statistical checks and family-wise error rate corrections (Holm–Bonferroni). When tests show no statistically significant separation between model arms, we explicitly document that no claim of superiority can be made.
-    `,
-    metrics: [
-      { label: 'Held-Out Metric', val: '1.6865 bpc (Gutenberg Prose v2)' },
-      { label: 'Data Isolation', val: 'Whole-Work Author Splits' },
-      { label: 'Statistical Gate', val: 'Holm–Bonferroni Family-Wise Check' }
-    ]
+    finding: 'Across five random seeds, seed standard deviation is σ = 0.00226 bpc on prose, 0.00337 on whole pack, and 0.01232 on mathematics.',
+    evidenceClass: 'Experimental',
+    basis: 'E2614 · ADR-0042',
+    caveat: 'Establishes the empirical noise floor: claims of prose superiority must exceed 0.007 bpc (3σ) to be statistically defensible.'
   },
   {
-    id: 'efficiency',
     num: '06',
-    title: 'Efficient Intelligence & Parameter Density',
-    status: 'Planned' as const,
-    summary: 'Exploring maximum semantic compression per parameter and grounded retrieval interfaces.',
-    content: `
-      True engineering elegance lies in doing more with less. Chakaso investigates parameter density: extracting maximum structural and syntactic capability out of compact models (1M to 50M parameters).
-      
-      By pairing compact neural models with deterministic application-layer grounding (BM25 retrieval, citation verification, and factual consistency checks), we explore systems that achieve verifiable correctness without requiring hundreds of billions of ungrounded parameters.
-    `,
-    metrics: [
-      { label: 'Target Model Size', val: '1M – 50M Parameters' },
-      { label: 'Grounding Adapter', val: 'BM25 / Dense Hybrid' },
-      { label: 'Verification Goal', val: 'Verifiable Evidence Attribution' }
-    ]
+    finding: 'Space-prefixed Byte-Pair Encoding lowers held-out loss by 0.023 bpc across all seeds with compute and distinct training documents strictly fixed.',
+    evidenceClass: 'Experimental',
+    basis: 'E2625 · E2630 · ADR-0051',
+    caveat: 'Formal adoption in ADR-0051 replaces standalone space tokenization with space-prefixed BPE.'
   }
+];
+
+const subSections = [
+  { title: 'Experiment Archive', href: '/research/experiments', desc: 'Browse all 36 preregistered experiments (E2601–E2636) with exact parameters, metrics, and non-claims.' },
+  { title: 'Methodology Standards', href: '/research/methodology', desc: 'Preregistration rules, controlled comparisons, multi-seed variance tracking, and Holm–Bonferroni error gates.' },
+  { title: 'Data & Provenance', href: '/research/data', desc: 'Corpus composition, Apache-2.0 and public domain licensing, SHA-256 fingerprints, and snapshot recovery.' },
+  { title: 'Evaluation & Splitting', href: '/research/evaluation', desc: 'Bits per character (bpc), within-work vs whole-work splits (ADR-0042), and the distinction between loss and usefulness.' }
 ];
 ---
 
 <Layout
-  title="Research Program & Methodology — Chakaso"
-  description="Comprehensive research overview: model architectures, tokenization, optimization dynamics, reproducibility, and empirical verification."
+  title="Research Program & Evidence Ledger — Chakaso"
+  description="Comprehensive research program of Chakaso: model architectures, tokenization, training dynamics, multi-seed noise bounds, and empirical findings."
   currentPath="/research"
 >
   <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
@@ -132,76 +80,163 @@ const domains = [
       </p>
     </div>
 
-    <!-- Core Tenets Banner -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e12]/80 mb-20">
-      <div class="flex flex-col gap-2">
-        <div class="font-mono text-xs text-indigo-400 uppercase tracking-wider">Provenance</div>
-        <div class="text-sm font-semibold text-white">Controlled Datasets</div>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          Every training sample is traced to a verified document with committed SHA-256 digests and explicit licensing (Apache-2.0, Public Domain).
-        </p>
-      </div>
-      <div class="flex flex-col gap-2">
-        <div class="font-mono text-xs text-indigo-400 uppercase tracking-wider">Reproducibility</div>
-        <div class="text-sm font-semibold text-white">Deterministic Execution</div>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          Identical random seeds, immutable tokenizers, and locked configs guarantee that any trained checkpoint can be reproduced independently.
-        </p>
-      </div>
-      <div class="flex flex-col gap-2">
-        <div class="font-mono text-xs text-indigo-400 uppercase tracking-wider">Restraint</div>
-        <div class="text-sm font-semibold text-white">Documented Limitations</div>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          We explicitly withhold claims of general assistant capability when models only exhibit baseline language modelling convergence.
-        </p>
+    <!-- Sub-Section Navigation Hub -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-20">
+      {subSections.map((sec) => (
+        <a
+          href={sec.href}
+          class="p-5 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 hover:bg-[#12151b] hover:border-indigo-500/40 transition-all flex flex-col justify-between group"
+        >
+          <div>
+            <h3 class="text-sm font-semibold text-white group-hover:text-indigo-300 transition-colors flex items-center justify-between">
+              <span>{sec.title}</span>
+              <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed font-sans">
+              {sec.desc}
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-white/[0.04] text-[10px] font-mono text-indigo-400 uppercase tracking-wider">
+            Explore Section &rarr;
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Core Research Questions -->
+    <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14] mb-20">
+      <span class="font-mono text-xs uppercase tracking-widest text-indigo-400 block mb-2">Inquiry Framework</span>
+      <h2 class="text-2xl font-bold text-white tracking-tight mb-4">Core Research Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300 leading-relaxed font-sans">
+        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
+          <span class="font-mono text-indigo-400 font-semibold block mb-1">Q1 · Architecture Efficiency</span>
+          <p>What is the minimal architectural complexity required to establish stable syntactic prediction without parameter bloat?</p>
+        </div>
+        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
+          <span class="font-mono text-indigo-400 font-semibold block mb-1">Q2 · Data Composition</span>
+          <p>How does register weighting (code, math, documentation, prose) alter cross-entropy trade-offs across distinct evaluation domains?</p>
+        </div>
+        <div class="p-4 rounded-xl border border-white/[0.05] bg-white/[0.02]">
+          <span class="font-mono text-indigo-400 font-semibold block mb-1">Q3 · Empirical Verification</span>
+          <p>Can an independent research project achieve 100% reproducible training and offline verification with zero external dependencies?</p>
+        </div>
       </div>
     </div>
 
-    <!-- Six Research Domains Detailed -->
-    <div class="flex flex-col gap-16">
+    <!-- Major Findings Ledger -->
+    <div class="mb-20">
       <SectionHeader
-        index="PROGRAM"
-        tag="AREAS"
-        title="Six Foundational Disciplines"
-        description="Detailed exploration of each technical domain under active investigation within the Chakaso codebase."
+        index="RESULTS"
+        tag="MEASURED"
+        title="Major Empirical Findings"
+        description="Key conclusions verified through preregistered runs, multi-seed studies, and statistical significance testing."
       />
 
-      <div class="flex flex-col gap-12">
-        {domains.map((d) => (
-          <article id={d.id} class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14]/70 hover:border-indigo-500/30 transition-all duration-300">
-            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-6 border-b border-white/[0.06]">
-              <div class="max-w-2xl">
-                <div class="flex items-center gap-3 mb-2 font-mono text-xs">
-                  <span class="text-indigo-400 font-semibold">{d.num}</span>
-                  <span class="text-slate-600">/</span>
-                  <span class="text-slate-400 uppercase tracking-wider">Domain</span>
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight">
-                  {d.title}
-                </h2>
-                <p class="mt-2 text-sm text-slate-400 font-sans">
-                  {d.summary}
+      <div class="flex flex-col gap-4">
+        {majorFindings.map((mf) => (
+          <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0c0e12]/80 flex flex-col md:flex-row md:items-start justify-between gap-6">
+            <div class="flex items-start gap-4">
+              <span class="font-mono text-xs font-bold text-indigo-400 px-2 py-1 rounded bg-indigo-500/10 border border-indigo-500/20 shrink-0">
+                {mf.num}
+              </span>
+              <div>
+                <p class="text-sm sm:text-base font-semibold text-white leading-snug">
+                  {mf.finding}
                 </p>
-              </div>
-
-              <div class="shrink-0">
-                <StatusBadge status={d.status} size="md" />
-              </div>
-            </div>
-
-            <!-- Content Body -->
-            <div class="py-6 text-sm sm:text-base text-slate-300 leading-relaxed font-sans max-w-4xl space-y-4">
-              <p>{d.content}</p>
-            </div>
-
-            <!-- Metrics / Key Specs -->
-            <div class="pt-6 border-t border-white/[0.06] grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {d.metrics.map((m) => (
-                <div class="p-3.5 rounded-lg border border-white/[0.04] bg-white/[0.02]">
-                  <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">{m.label}</div>
-                  <div class="text-xs font-mono font-medium text-slate-200 mt-1">{m.val}</div>
+                <div class="mt-2 text-xs text-slate-400 font-sans leading-relaxed">
+                  <span class="text-amber-400 font-mono text-[11px] uppercase mr-1">Caveat:</span>
+                  {mf.caveat}
                 </div>
-              ))}
+              </div>
+            </div>
+
+            <div class="shrink-0 self-end md:self-start font-mono text-right text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-white/[0.04] text-slate-300 border border-white/[0.06] block mb-1">
+                {mf.evidenceClass}
+              </span>
+              <span class="text-slate-500">{mf.basis}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Seven Research Disciplines (Deep Dive) -->
+    <div class="mb-20">
+      <SectionHeader
+        index="PROGRAM"
+        tag="DISCIPLINES"
+        title="Seven Research Disciplines"
+        description="Detailed inquiry, implementation status, and next evidence requirements across all active domains."
+      />
+
+      <div class="flex flex-col gap-10">
+        {RESEARCH_DOMAINS.map((domain) => (
+          <article id={domain.id} class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14]/70 hover:border-indigo-500/30 transition-all duration-300">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between pb-6 border-b border-white/[0.06] gap-4">
+              <div>
+                <div class="flex items-center gap-3 font-mono text-xs text-indigo-400 mb-2">
+                  <span class="font-semibold">{domain.num}</span>
+                  <span class="text-slate-600">/</span>
+                  <span class="uppercase tracking-wider">Research Discipline</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  {domain.title}
+                </h2>
+              </div>
+              <div class="shrink-0">
+                <StatusBadge status={domain.status} size="md" />
+              </div>
+            </div>
+
+            <!-- Question & Why It Matters -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-6 border-b border-white/[0.06] text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-wider text-indigo-400 block mb-1">Inquiry Question</span>
+                <p>{domain.question}</p>
+              </div>
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-wider text-slate-400 block mb-1">Why It Matters</span>
+                <p>{domain.whyItMatters}</p>
+              </div>
+            </div>
+
+            <!-- Implemented vs Measured -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-6 border-b border-white/[0.06] text-xs leading-relaxed font-sans">
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-wider text-emerald-400 block mb-1">Implemented in Code</span>
+                <p class="text-slate-300">{domain.implemented}</p>
+              </div>
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-wider text-indigo-300 block mb-1">Empirically Measured</span>
+                <p class="text-slate-300">{domain.measured}</p>
+              </div>
+            </div>
+
+            <!-- Unknowns & Next Evidence Requirements -->
+            <div class="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed font-sans">
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-wider text-amber-400 block mb-1">Current Unknowns</span>
+                <p class="text-slate-400">{domain.unknowns}</p>
+              </div>
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-wider text-sky-400 block mb-1">Next Evidence Requirement</span>
+                <p class="text-slate-300">{domain.nextEvidence}</p>
+              </div>
+            </div>
+
+            <!-- Provenance & Links -->
+            <div class="mt-6 pt-4 border-t border-white/[0.04] flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-500 gap-2">
+              <div>
+                <span>Experiments: {domain.experiments.join(', ')}</span>
+                <span class="mx-2">·</span>
+                <span>Decisions: {domain.adrs.join(', ')}</span>
+              </div>
+              <a href="/research/experiments" class="text-indigo-400 hover:text-indigo-300 transition-colors">
+                Inspect in Experiment Archive &rarr;
+              </a>
             </div>
           </article>
         ))}

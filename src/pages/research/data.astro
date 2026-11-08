@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import { CORPORA } from '../../data/corpora';
+
+const principles = [
+  {
+    title: 'Content Licensing at Source',
+    desc: 'Web-scale text packaging licenses only the scrape packaging, not the underlying text. Chakaso uses exclusively text whose source license permits redistribution (Apache-2.0 or verified Public Domain).'
+  },
+  {
+    title: 'Immutable Cryptographic Fingerprints',
+    desc: 'Every document in a manifest is verified by its SHA-256 digest. If an upstream URL or local file changes by a single bit, the training pipeline refuses to ingest the drifted corpus.'
+  },
+  {
+    title: 'Snapshot Recovery from Git (ADR-0036)',
+    desc: 'Internal documentation snapshots are pegged to Git commit hashes. Running snapshot extraction re-materializes the exact historical bytes, ensuring older experiments remain 100% reproducible.'
+  },
+  {
+    title: 'Whole-Work Author Boundaries (ADR-0042)',
+    desc: 'Corpus chunking cuts books into 16,384-character chapter segments. Split algorithms assign whole works to either train or test, eliminating chapter-level interpolation across the partition.'
+  }
+];
+---
+
+<Layout
+  title="Data Provenance & Corpus Curricula — Chakaso"
+  description="Data composition, provenance tracking, SHA-256 fingerprints, and split partitions across all Chakaso training corpora."
+  currentPath="/research/data"
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    <!-- Breadcrumb & Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="flex items-center gap-2 font-mono text-xs text-indigo-400 uppercase tracking-widest mb-4">
+        <a href="/research" class="hover:underline">Research</a>
+        <span class="text-slate-600">/</span>
+        <span class="text-slate-300">Data & Provenance</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
+        Provenance, Integrity & Curricula
+      </h1>
+
+      <p class="mt-4 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
+        A language model is the mathematical compression of the data it consumes. We reject unverified internet scrapes. Every byte ingested by Chakaso is tracked by content digests, clear licensing, and deterministic partition rules.
+      </p>
+    </div>
+
+    <!-- Core Data Principles -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+      {principles.map((p, idx) => (
+        <div class="p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 flex flex-col justify-between">
+          <div>
+            <span class="font-mono text-xs text-indigo-400 font-semibold mb-2 block">0{idx + 1}</span>
+            <h3 class="text-base font-semibold text-white mb-2">{p.title}</h3>
+            <p class="text-xs text-slate-400 leading-relaxed font-sans">
+              {p.desc}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Verified Corpora Catalog -->
+    <div class="mb-20">
+      <SectionHeader
+        index="CORPUS"
+        tag="CATALOG"
+        title="Pinned Training Corpora"
+        description="Comprehensive specifications of all four datasets prepared and evaluated in the Chakaso codebase."
+      />
+
+      <div class="flex flex-col gap-8">
+        {CORPORA.map((corpus) => (
+          <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14]/70 hover:border-indigo-500/30 transition-all duration-300">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between pb-6 border-b border-white/[0.06] gap-4">
+              <div>
+                <span class="font-mono text-xs text-indigo-400 uppercase tracking-wider">{corpus.version}</span>
+                <h2 class="text-2xl font-bold text-white mt-1 font-mono">{corpus.name}</h2>
+                <span class="font-mono text-xs text-slate-500">ID: {corpus.id}</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-mono text-[11px] px-2.5 py-1 rounded bg-white/[0.04] text-slate-300 border border-white/[0.06]">
+                  {corpus.license}
+                </span>
+                <span class="font-mono text-[11px] px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                  {corpus.splitStrategy}
+                </span>
+              </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-b border-white/[0.06] font-mono text-center">
+              <div class="p-3 rounded-lg border border-white/[0.04] bg-white/[0.01]">
+                <div class="text-[10px] text-slate-500 uppercase">Documents</div>
+                <div class="text-lg font-semibold text-white mt-0.5">{corpus.documentCount.toLocaleString()}</div>
+              </div>
+              <div class="p-3 rounded-lg border border-white/[0.04] bg-white/[0.01]">
+                <div class="text-[10px] text-slate-500 uppercase">Distinct Works</div>
+                <div class="text-lg font-semibold text-white mt-0.5">{corpus.workCount}</div>
+              </div>
+              <div class="p-3 rounded-lg border border-white/[0.04] bg-white/[0.01]">
+                <div class="text-[10px] text-slate-500 uppercase">Characters</div>
+                <div class="text-lg font-semibold text-indigo-300 mt-0.5">{corpus.characterCount.toLocaleString()}</div>
+              </div>
+              <div class="p-3 rounded-lg border border-white/[0.04] bg-white/[0.01]">
+                <div class="text-[10px] text-slate-500 uppercase">Fingerprint</div>
+                <div class="text-xs font-semibold text-slate-300 mt-1 truncate">{corpus.fingerprint}</div>
+              </div>
+            </div>
+
+            <!-- Composition & Limitations -->
+            <div class="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-wider text-slate-400 block mb-1">Composition & Registers:</span>
+                <p class="text-slate-300 font-sans">{corpus.composition}</p>
+                <div class="mt-3 font-mono text-[11px] text-slate-500">
+                  Trained in runs: {corpus.experimentsTrained.join(', ')}
+                </div>
+              </div>
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-wider text-amber-400 block mb-1">Known Limitations:</span>
+                <p class="text-slate-300 font-sans">{corpus.limitations}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Provenance Metadata -->
+    <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0c0e12]/60 text-xs font-mono text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <span class="text-indigo-400 font-semibold">Provenance Governance: </span>
+        <span>Manifests locked by chakaso.training.manifest. Recoverable via ADR-0036.</span>
+      </div>
+      <div class="shrink-0 text-slate-500">
+        Status: Verified & Committed
+      </div>
+    </div>
+  </div>
+</Layout>

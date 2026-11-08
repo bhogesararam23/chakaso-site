@@ -1,0 +1,151 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+
+const comparativeData = [
+  { model: 'Uniform Random Baseline', type: 'Floor Baseline', bpc: '5.5661', delta: 'Reference' },
+  { model: 'Unigram Frequency Baseline', type: 'Frequency Baseline', bpc: '3.2263', delta: '-2.3398' },
+  { model: '1M Parameter Transformer (E2605)', type: 'Trained Architecture', bpc: '1.9043', delta: '-3.6618' },
+  { model: '1M Causal Decoder Control (E2611)', type: 'Matched Capacity Arm', bpc: '1.8077', delta: '-3.7584' },
+  { model: '3.41M Rotary Decoder (E2608)', type: 'Reference Baseline', bpc: '1.6865', delta: '-3.8796*' }
+];
+
+const evaluationConcepts = [
+  {
+    title: 'Bits Per Character (bpc)',
+    formula: 'bpc = (Loss / ln 2) × (Tokens / Chars)',
+    desc: 'The only mathematically sound metric across different vocabularies. Perplexity varies arbitrarily with tokenizer vocabulary size (V), whereas bpc normalises entropy to the underlying characters.'
+  },
+  {
+    title: 'Whole-Work vs Within-Work Splits',
+    formula: 'Books ∩ Test = ∅',
+    desc: 'In E2608, 100% of test characters belonged to books represented in training (within-work split). Under ADR-0042, whole works are isolated to eliminate within-book style memorization.'
+  },
+  {
+    title: 'Repetition & Entropy Diagnostics',
+    formula: 'Bigram Repetition = 0.5538',
+    desc: 'E2610 proved that greedy decoding on undertrained distributions collapses into phrase loops. Tracking bigram repetition and cycle frequency prevents confusing low loss with usable text.'
+  },
+  {
+    title: 'Holm–Bonferroni Correction',
+    formula: 'p(i) ≤ α / (k - i + 1)',
+    desc: 'Prevents false discoveries when evaluating multiple model variations simultaneously. If a model arm fails this step-down correction, no claim of superiority is published.'
+  }
+];
+---
+
+<Layout
+  title="Evaluation Methodology & Statistical Rigor — Chakaso"
+  description="Empirical evaluation standards: bits per character, within-work vs whole-work splits, repetition diagnostics, and Holm–Bonferroni corrections."
+  currentPath="/research/evaluation"
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+    <!-- Breadcrumb & Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="flex items-center gap-2 font-mono text-xs text-indigo-400 uppercase tracking-widest mb-4">
+        <a href="/research" class="hover:underline">Research</a>
+        <span class="text-slate-600">/</span>
+        <span class="text-slate-300">Evaluation</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
+        The Metric & The Reality
+      </h1>
+
+      <p class="mt-4 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
+        A lower cross-entropy loss is not proof of language understanding. We separate language-modelling entropy from actual behavioural competence, enforcing strict whole-work data isolation and non-parametric statistical gates.
+      </p>
+    </div>
+
+    <!-- The Golden Distinction: Loss vs Usefulness -->
+    <div class="p-8 rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/30 to-[#0c0e12] mb-20">
+      <div class="max-w-3xl">
+        <span class="font-mono text-xs uppercase tracking-widest text-indigo-400 block mb-2">Core Epistemic Distinction</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">
+          Language-Modelling Loss ≠ Model Usefulness
+        </h2>
+        <p class="text-sm text-slate-300 leading-relaxed font-sans mb-4">
+          In experiment E2608, our 3.41M parameter model reached 1.6865 bpc on held-out text—comfortably beating uniform random (5.5661) and unigram frequency (3.2263) floors.
+        </p>
+        <p class="text-sm text-slate-300 leading-relaxed font-sans mb-4">
+          Yet in experiment E2610, when we measured generation quality, greedy decoding exhibited a mean bigram repetition rate of <strong>0.5538</strong>. The model produced repetitive phrases and zero coherent paragraphs.
+        </p>
+        <div class="p-4 rounded-xl border border-white/10 bg-black/40 text-xs font-mono text-slate-400">
+          <span class="text-amber-400 font-semibold">Empirical Conclusion: </span>
+          <span>A model can be mathematically well-optimized for next-subword prediction while completely lacking semantic coherence. We explicitly refuse to claim assistant capability based on cross-entropy loss improvements.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparative Baseline Table -->
+    <div class="mb-20">
+      <SectionHeader
+        index="BASELINES"
+        tag="DATA"
+        title="Measured Loss Progression Across Baselines"
+        description="Empirical measurements recorded on Gutenberg English Prose v2 across trivial, frequency, and neural model tiers."
+      />
+
+      <div class="p-8 rounded-2xl border border-white/[0.08] bg-[#0b0e14] overflow-x-auto">
+        <table class="w-full text-left font-mono text-xs text-slate-300">
+          <thead>
+            <tr class="border-b border-white/10 text-slate-500 uppercase tracking-wider text-[11px]">
+              <th class="pb-4 pr-6">Model / Architecture Tier</th>
+              <th class="pb-4 pr-6">Classification</th>
+              <th class="pb-4 pr-6">Held-Out bpc</th>
+              <th class="pb-4">Delta vs Floor</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/[0.05]">
+            {comparativeData.map((row) => (
+              <tr>
+                <td class="py-4 pr-6 font-semibold text-white">{row.model}</td>
+                <td class="py-4 pr-6 text-slate-400">{row.type}</td>
+                <td class="py-4 pr-6 text-indigo-300 font-bold">{row.bpc}</td>
+                <td class="py-4 text-emerald-400">{row.delta}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div class="pt-4 text-[11px] font-mono text-slate-500">
+          * Note: E2608 was evaluated on a within-work split (ADR-0042). See below for partition rules.
+        </div>
+      </div>
+    </div>
+
+    <!-- Evaluation Concepts Grid -->
+    <div class="mb-20">
+      <SectionHeader
+        index="CONCEPTS"
+        tag="INTEGRITY"
+        title="Evaluation Instruments & Protocols"
+        description="The mathematical tools and decision rules used to evaluate model convergence."
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {evaluationConcepts.map((ec) => (
+          <div class="p-6 rounded-xl border border-white/[0.08] bg-[#0c0e12]/80 flex flex-col justify-between">
+            <div>
+              <div class="font-mono text-xs text-indigo-400 font-semibold mb-2">{ec.formula}</div>
+              <h3 class="text-base font-semibold text-white mb-2">{ec.title}</h3>
+              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
+                {ec.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Provenance Footer -->
+    <div class="p-6 rounded-xl border border-white/[0.07] bg-[#0c0e12]/60 text-xs font-mono text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <span class="text-indigo-400 font-semibold">Evaluation Authority: </span>
+        <span>docs/evaluation.md · ADR-0042 (Held-out works) · ADR-0052 (Declared verdicts).</span>
+      </div>
+      <div class="shrink-0 text-slate-500">
+        Status: Strict Protocol
+      </div>
+    </div>
+  </div>
+</Layout>
