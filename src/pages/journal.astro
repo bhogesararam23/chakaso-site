@@ -41,7 +41,7 @@ const journalEntries = [
     category: 'Experiment Report',
     tag: 'E2613 · E2612',
     summary: 'Isolating whether the prose loss penalty in the 5-register technical mixture was caused by token starvation or register interference.',
-    findings: 'A prose-only arm trained on half the token volume scored 1.8062 bpc (virtually identical to the full prose control at 1.8093 bpc) compared to the mixture at 1.8395 bpc. Proved that the mixture penalty is driven by spending sequence positions on technical syntax rather than data corruption.',
+    findings: 'A prose-only arm trained on half the token volume scored 1.8062 bpc (virtually identical to the full prose control at 1.8093 bpc) compared to the mixture at 1.8395 bpc. Demonstrated that the mixture penalty is driven by spending sequence positions on technical syntax rather than data corruption.',
     status: 'Completed' as const
   },
   {
@@ -61,7 +61,7 @@ const journalEntries = [
     category: 'Research Finding',
     tag: 'E2610 · ADR-0039',
     summary: 'Calibrated parameter sweep across temperature, top-k, and top-p to diagnose phrase repetition in the 3.41M parameter baseline.',
-    findings: 'Proved that greedy decoding repetition (bigram repetition 0.5538) is the mathematical property of greedy decoding on a 3.4M entropy distribution, not a pipeline defect. Stochastic sampling introduces lexical diversity at the expense of immediate syntactic collapse. No decoding parameter setting writes coherent text.',
+    findings: 'Confirmed that greedy decoding repetition (bigram repetition 0.5538) is the mathematical consequence of greedy search on a 3.4M entropy distribution, not a pipeline defect. Stochastic sampling introduces lexical diversity at the expense of immediate syntactic collapse. No decoding parameter setting writes coherent text.',
     status: 'Completed' as const
   },
   {

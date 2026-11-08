@@ -4,27 +4,27 @@ import SectionHeader from '../components/SectionHeader.astro';
 
 const principles = [
   {
-    title: 'First Principles Construction',
-    desc: 'We construct neural networks from random weight initializations, using known, inspectable training pipelines. We do not fine-tune black-box closed models and claim to have discovered new intelligence.'
+    title: 'Random Initialization',
+    desc: 'Neural networks are constructed from random weight initializations using transparent, inspectable training pipelines. The project does not fine-tune black-box endpoints or claim borrowed capabilities as original work.'
   },
   {
-    title: 'Complete Provenance Accounting',
-    desc: 'Training text must come from unambiguous sources with clear licenses (Apache-2.0, public domain). Every corpus snapshot is frozen by its SHA-256 fingerprint so identical runs can be reproduced decades later.'
+    title: 'Explicit Provenance & Pinned Data',
+    desc: 'Training text is drawn from unambiguous sources with verified licenses or public domain status. Every corpus snapshot is pinned by its SHA-256 fingerprint so identical runs can be reproduced on identical software environments.'
   },
   {
-    title: 'Epistemic Honesty',
-    desc: 'We publish what the evidence supports. When a smaller model arm ties or underperforms, or when samples degenerate into cycles, that failure is documented as an empirical fact, not suppressed.'
+    title: 'Negative Result Transparency',
+    desc: 'Empirical records document what the evidence supports. When a smaller arm ties or underperforms, or when greedy decoding collapses into repetitive loops, those outcomes are recorded as primary findings, not suppressed.'
   },
   {
-    title: 'Minimal Dependency Overhead',
-    desc: 'A robust research project should run on standard hardware without an avalanche of unstable third-party wrappers. From standard-library HTTP serving to CPU CI gates, we prioritize lean, verifiable software.'
+    title: 'Lean, Verifiable Implementations',
+    desc: 'The codebase prioritizes standard-library modules, clear interfaces, and deterministic CPU evaluation. Anyone with a Python environment can inspect the weights, verify the loss curves, and run the serving layer.'
   }
 ];
 ---
 
 <Layout
-  title="About the Initiative — Chakaso"
-  description="About Chakaso: an independent AI research project exploring language models, computational systems, and the foundations of machine intelligence."
+  title="About — Chakaso"
+  description="About Chakaso: an independent research initiative exploring compact language models, tokenization dynamics, and empirical evaluation harnesses."
   currentPath="/about"
 >
   <div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
@@ -33,36 +33,36 @@ const principles = [
     <div class="max-w-3xl mb-16">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-[#0e1117] mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">About the Initiative</span>
+        <span class="font-mono text-xs uppercase tracking-wider text-slate-300">About Chakaso</span>
       </div>
 
       <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight editorial-title">
-        Intelligence, Engineered from First Principles
+        Independent Language Model Research
       </h1>
 
       <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed font-sans">
-        Chakaso is an independent AI research and engineering initiative exploring language models, computational architectures, and the foundational mathematics of machine intelligence.
+        Chakaso is an ongoing research initiative investigating how language models behave when built, trained, and evaluated from random initialization without corporate sponsors or borrowed weights.
       </p>
     </div>
 
     <!-- 1. What Chakaso Is & Why It Exists -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 items-start">
       <div class="lg:col-span-5">
-        <span class="font-mono text-xs text-indigo-400 uppercase tracking-widest block mb-2">Genesis & Purpose</span>
+        <span class="font-mono text-xs text-indigo-400 uppercase tracking-widest block mb-2">Scope & Focus</span>
         <h2 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight leading-snug">
-          Why build another language model from scratch?
+          Why train language models from scratch?
         </h2>
       </div>
 
       <div class="lg:col-span-7 flex flex-col gap-6 text-sm sm:text-base text-slate-300 leading-relaxed font-sans">
         <p>
-          Much of modern artificial intelligence has shifted toward API consumption: wrapping massive proprietary endpoints in thin interfaces and calling it research. In contrast, true engineering understanding requires building the computational engine from the ground up.
+          Much of current machine learning development wraps proprietary third-party endpoints in application layers. While functional for product development, consuming hosted APIs does not clarify the underlying mechanics of sequence modeling.
         </p>
         <p>
-          Chakaso was initiated to interrogate the structural foundations of autoregressive modeling. How do tokenization choices impact the entropy of small sequences? How do causal attention heads interact with state-space recurrence? Can an independent researcher build a fully reproducible, self-contained model lifecycle &mdash; from tokenizer training and dataset manifests to multi-layer transformers and local HTTP streaming &mdash; with zero commercial black boxes?
+          Chakaso was created to examine the structural foundations of autoregressive decoders directly. How do subword boundary rules impact sequence compression and downstream loss? Can a rotary decoder outperform standard absolute positional transformers under constrained budgets? What is the true measurement noise floor across random initialization seeds?
         </p>
         <p>
-          The name <strong class="text-white font-medium">Chakaso</strong> embodies this pursuit: a disciplined, systematic inquiry into how machine intelligence emerges when every parameter, loss curve, and gradient norm is open to inspection.
+          The project approaches language modeling as an empirical science: training small models (1M to 3.4M parameters), running multi-seed sweeps, testing hypotheses against preregistered criteria, and recording both positive gains and negative limitations.
         </p>
       </div>
     </div>
@@ -72,8 +72,8 @@ const principles = [
       <SectionHeader
         index="ETHOS"
         tag="PRINCIPLES"
-        title="Core Engineering Standards"
-        description="Non-negotiable principles guiding every commit, architectural decision, and experiment."
+        title="Engineering Standards"
+        description="Principles governing every commit, architectural decision, and experiment in the project."
       />
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -91,16 +91,24 @@ const principles = [
       </div>
     </div>
 
-    <!-- 3. Open Source Commitment & Long-Term Vision -->
-    <div class="p-8 sm:p-12 rounded-2xl border border-white/[0.08] bg-[#0a0d13] mb-12">
+    <!-- 3. Open Source Commitment & Licensing -->
+    <div class="p-8 sm:p-10 rounded-2xl border border-white/[0.08] bg-[#0c0e12] mb-12">
       <div class="max-w-3xl">
-        <span class="font-mono text-xs text-indigo-400 uppercase tracking-widest block mb-2">Long-Term Orientation</span>
+        <span class="font-mono text-xs text-indigo-400 uppercase tracking-widest block mb-2">Licensing & Provenance</span>
         <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">
-          Open-Source, Transparent, and Grounded
+          Open Software & Documented Provenance
         </h2>
-        <p class="text-sm sm:text-base text-slate-300 leading-relaxed mb-6">
-          Chakaso operates under the Apache-2.0 open-source license. We believe the future of robust intelligence systems relies on inspectability, verification boundaries, and rigorous scientific accounting.
-        </p>
+        
+        <div class="space-y-4 text-sm text-slate-300 leading-relaxed mb-6">
+          <p>
+            Chakaso maintains clear boundaries between its source code, datasets, and model checkpoints:
+          </p>
+          <ul class="space-y-2 font-mono text-xs text-slate-400 list-disc list-inside">
+            <li><strong class="text-slate-200">Software & Documentation:</strong> Released under the permissive <strong class="text-slate-200">Apache-2.0</strong> license (ADR-0004).</li>
+            <li><strong class="text-slate-200">Training Corpora:</strong> Public domain English literature from Project Gutenberg (ADR-0036) and self-authored documentation manifests.</li>
+            <li><strong class="text-slate-200">Model Checkpoints:</strong> Experimental research artifacts governed by strict release gates. Chakaso Base 0.1.0 passes Level 1 (structural integrity) and Level 2 (reproducible weights), but Level 3 (useful assistant behavior) remains explicitly withheld (ADR-0039).</li>
+          </ul>
+        </div>
 
         <div class="flex flex-wrap items-center gap-4 pt-4 border-t border-white/[0.08]">
           <a
@@ -112,7 +120,7 @@ const principles = [
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
             </svg>
-            <span>GitHub Repository</span>
+            <span>Research Repository</span>
           </a>
 
           <a
