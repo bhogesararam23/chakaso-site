@@ -1,83 +1,98 @@
 # Chakaso Official Website
 
-The official website for **Chakaso** &mdash; an independent AI research and engineering initiative exploring language models, computational systems, and the foundations of machine intelligence.
+The official source repository for the **Chakaso** research website.
 
-- **Production Domain:** [https://chakaso.tech](https://chakaso.tech)
+Chakaso is an independent artificial intelligence research and engineering initiative focused on developing language models from random initialization and exploring the foundational computational systems, architectures, and methodologies of machine intelligence. This repository hosts the public-facing editorial and presentation platform for the project.
+
+- **Intended Domain:** [https://chakaso.tech](https://chakaso.tech) *(configured destination for upcoming deployment)*
 - **Model Research Repository:** [https://github.com/bhogesararam23/chakaso](https://github.com/bhogesararam23/chakaso)
 - **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ---
 
-## Architecture & Technology Stack
+## Brand Positioning
 
-The website is engineered for static delivery, high responsiveness, and zero external runtime dependencies:
+> **CHAKASO**  
+> *"Intelligence, engineered from first principles."*  
+>  
+> *"An independent exploration of language models, computational systems, and the foundations of machine intelligence."*
 
-- **Framework:** [Astro 5](https://astro.build/) (Static Site Generator)
-- **Language:** TypeScript (Strict mode)
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) with custom dark graphite & violet design tokens
-- **Interactive Islands:** React 19 + Canvas 2D spatial intelligence topology
-- **Icons:** Lucide Icons
-- **Target Deployment:** Cloudflare Pages (Static Output)
+The website presents Chakaso as a serious, technically sophisticated independent research initiative. It avoids marketing exaggerations, student portfolio clichés, and generic AI startup tropes, communicating ambition while strictly reflecting the measured empirical reality of the underlying research.
 
 ---
 
-## Pages & Routes
+## Website Purpose & Scope
 
-| Route | Title | Purpose |
+The website serves as the primary editorial, educational, and publication interface for the Chakaso project. Its purpose is to:
+
+1. **Publish First-Party Research:** Present verified experimental findings, methodologies, and architectural decisions directly on-site without forcing visitors to navigate raw source files on GitHub.
+2. **Transparently Report Baselines:** Document model parameters, held-out losses, dataset provenance, and exact behavioural limitations with scientific integrity.
+3. **Detail System Architecture:** Provide visual, mathematical, and conceptual explanations of the causal transformer pipeline, tokenizer contracts, and local zero-dependency runtimes.
+4. **House the Documentation Hub:** Provide a searchable technical reference for the Chakaso Python interface, model lifecycle, and serving protocols.
+5. **Maintain an Empirical Journal:** Track chronological architectural decision records (ADRs) and experiment reports with clear evidence classifications.
+
+---
+
+## Information Architecture & Sections
+
+The website is structured into six dedicated knowledge sections:
+
+| Section | Route | Focus |
 | :--- | :--- | :--- |
-| `/` | Homepage | Primary experience: 3D interactive lattice, research philosophy, domains, architecture preview, and status matrix. |
-| `/research` | Research Program | 6 research domains, training methodology, whole-work splits, and reproducibility standards. |
-| `/architecture` | Architecture | Deep breakdown of tokenization, embeddings, causal transformer blocks, and standard-library serving. |
-| `/models` | Experimental Models | Transparent documentation of the 3.41M parameter baseline and the 3-level release gate. |
-| `/journal` | Research Journal | Verified Architectural Decision Records (ADRs) and experiment reports. |
-| `/about` | About the Initiative | Genesis, purpose, engineering standards, open-source commitment, and vision. |
-| `/404` | 404 Error | Custom dark technical 404 page with navigation fallbacks. |
+| **Homepage** | `/` | Spatial intelligence visual, brand philosophy, 6 foundational domains, architecture preview, and live status matrix. |
+| **Research Hub** | `/research` | The research program, questions, active hypotheses, and seven technical sub-domains. |
+| **Experiment Archive** | `/research/experiments` | Searchable, filterable ledger of verified experiments (E2601 through E2636) with exact parameters and findings. |
+| **Methodology** | `/research/methodology` | Scientific standards: preregistration, seed studies, Holm–Bonferroni corrections, and negative-result reporting. |
+| **Data & Provenance** | `/research/data` | Corpus composition, document boundaries, SHA-256 fingerprints, and licensing. |
+| **Evaluation** | `/research/evaluation` | Bits per character (bpc), within-work vs whole-work splits, repetition metrics, and capability probes. |
+| **Models** | `/models` | Model research catalog and detailed profile for Chakaso Base 0.1.0 (3.41M parameters, Level 2 release gate). |
+| **Architecture** | `/architecture` | Deep computational breakdown of the causal decoder stack, tensor dimensions, and standard-library HTTP serving. |
+| **Documentation** | `/docs` | Comprehensive on-site technical guides for the Python library, model contracts, and local serving adapters. |
+| **Journal** | `/journal` | Formal publication log of Architectural Decision Records (ADRs) and research dispatches. |
+| **About** | `/about` | Project genesis, engineering ethics, non-commercial research ethos, and long-term vision. |
 
 ---
 
-## Local Development & Verification
+## Frontend Architecture & Design Principles
 
-### Prerequisites
-- Node.js `20.x` or later (or Node.js 24)
-- `pnpm` (recommended), `npm`, or `bun`
+The website is designed with a premium, experimental, and dark technical aesthetic:
 
-### Install Dependencies
-```bash
-pnpm install
-```
-
-### Start Development Server
-```bash
-pnpm dev
-```
-Runs the local dev server at `http://localhost:4321`.
-
-### Type Check
-```bash
-pnpm check
-```
-
-### Build Production Artifact
-```bash
-pnpm build
-```
-Generates pure static HTML, CSS, and JS in the `dist/` directory.
-
-### Preview Production Build
-```bash
-pnpm preview
-```
+- **Framework:** [Astro 5](https://astro.build/) (Static Site Generation for sub-millisecond page loads and complete SEO indexing)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) with a bespoke dark graphite (`#07080a`) and restrained violet/blue design token system
+- **Interactive Visuals:** Bespoke HTML5 Canvas 3D spatial lattice engine with real-time perspective projection and cursor-reactive parallax
+- **Interactive Components:** React 19 islands for interactive tokenizer exploration and dynamic experiment filtering
+- **Motion & Ergonomics:** High-performance desktop cursor interpolation with trailing outer ring, contextual hover labels, and full `prefers-reduced-motion` compliance
+- **Dependencies:** Pure static output with zero runtime external API dependencies (no GitHub API rate limits, no third-party trackers, no backend server requirements)
 
 ---
 
-## Cloudflare Pages Deployment Configuration
+## Deployment & Hosting Target
 
-To deploy to Cloudflare Pages:
+The website is engineered for static output compatible with **Cloudflare Pages**:
 
-1. **Framework Preset:** `None` / `Astro`
-2. **Build Command:** `pnpm build` (or `npm run build`)
-3. **Build Output Directory:** `dist`
-4. **Environment Variables:**
-   - `NODE_VERSION`: `20.18.0` (or `22`)
+- **Target Host:** Cloudflare Pages
+- **Build Output:** Pure static HTML, CSS, and client-side JavaScript in `dist/`
+- **Intended Domain:** `https://chakaso.tech`
 
-Once built, configure your custom domain `chakaso.tech` in Cloudflare Pages &rarr; Custom Domains.
+> *Note: The domain `chakaso.tech` is the intended production destination. It is configured as the destination for initial deployment once DNS and Cloudflare Pages setup are verified.*
+
+---
+
+## Relationship to the Research Repository
+
+- **Website Repository (`chakaso-site`):** The public-facing presentation, editorial content, interactive visualisations, and documentation hub.
+- **Model Research Repository (`chakaso`):** The authoritative source for PyTorch model code, tokenizer training, dataset manifests, experiment logs, automated CI test suites, and Architectural Decision Records (ADRs).
+
+All public claims, metrics, and architecture descriptions on this website are derived from and verified against the upstream research repository.
+
+---
+
+## Contribution & Local Development
+
+Maintainer setup, local development workflows, type-checking instructions, and research verification requirements are documented in [**`CONTRIBUTING.md`**](./CONTRIBUTING.md).
+
+---
+
+## License
+
+This project is licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
