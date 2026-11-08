@@ -92,10 +92,13 @@ export default function ExperimentArchive() {
                   : 'border-white/[0.08] bg-[#0c0e12]/70 hover:border-white/20 hover:bg-[#0f121a]'
               }`}
             >
-              {/* Card Header Row */}
-              <div
+              {/* Card Header Row as Semantic Button */}
+              <button
+                type="button"
                 onClick={() => setExpandedId(isExpanded ? null : exp.id)}
-                className="p-6 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 select-none"
+                aria-expanded={isExpanded}
+                aria-controls={`exp-details-${exp.id}`}
+                className="w-full text-left p-6 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-2xl"
               >
                 <div className="flex items-start md:items-center gap-4">
                   <span className="font-mono text-xs font-bold px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shrink-0">
@@ -132,22 +135,36 @@ export default function ExperimentArchive() {
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
                 </div>
-              </div>
+              </button>
 
               {/* Card Body (Summary) */}
               <div className="px-6 pb-4">
                 <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
                   {exp.summary}
                 </p>
+                <div className="mt-3 flex items-center justify-between">
+                  <a
+                    href={`/research/experiments/${exp.id}`}
+                    className="inline-flex items-center gap-1.5 font-mono text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+                  >
+                    <span>View Dedicated Experiment Record</span>
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                  <span className="text-[11px] font-mono text-slate-500">
+                    {isExpanded ? 'Click header to collapse' : 'Click header for preview'}
+                  </span>
+                </div>
               </div>
 
               {/* Expanded Detailed Breakdown */}
               {isExpanded && (
-                <div className="px-6 pb-6 pt-4 border-t border-white/[0.06] flex flex-col gap-6 animate-fadeIn">
+                <div id={`exp-details-${exp.id}`} className="px-6 pb-6 pt-4 border-t border-white/[0.06] flex flex-col gap-6 animate-fadeIn">
                   {/* Research Question & Methodology */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-4 rounded-xl border border-white/[0.05] bg-black/30">
